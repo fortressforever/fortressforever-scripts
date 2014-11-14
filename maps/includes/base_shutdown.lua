@@ -4,9 +4,7 @@
 -----------------------------------------------------------------------------
 -- includes
 -----------------------------------------------------------------------------
-IncludeScript("base");
 IncludeScript("base_ctf");
-IncludeScript("base_teamplay");
 IncludeScript("base_location");
 IncludeScript("base_respawnturret");
 
