@@ -299,8 +299,10 @@
 	}
 	"JumpPad.Explode"
 	{
-		"channel"		"CHAN_STATIC"
+		"channel"		"CHAN_WEAPON"
 		"volume"		"1.0"
+		"soundlevel"	"SNDLVL_180dB"
+		"pitch"			"PITCH_NORM"
 		"CompatibilityAttenuation"	"1.0"
 		"wave"			"buildable/jumppad/jumppad_explode.wav"
 	}
