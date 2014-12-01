@@ -700,12 +700,12 @@ end
 function baseflag:hasanimation() return true end
 
 function baseflag:gettouchsize( mins, maxs )
-	mins.x = mins.x * 0.75
-	mins.y = mins.y * 0.75
-	maxs.x = maxs.x * 0.75
-	maxs.y = maxs.y * 0.75
+	mins.x = mins.x
+	mins.y = mins.y
+	maxs.x = maxs.x
+	maxs.y = maxs.y
 	mins.z = 0
-	maxs.z = maxs.z * 0.5
+	maxs.z = maxs.z * 0.65
 end
 
 function baseflag:getphysicssize( mins, maxs )
