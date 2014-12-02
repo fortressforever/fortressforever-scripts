@@ -41,13 +41,17 @@ function security_off( team )
 	OutputEvent(team.."_security_hurt", "Disable")
 	OutputEvent(team.."_laser_hurt", "Disable") -- a possible alias
 	
-	-- get the clip entity
-	local clip = GetEntityByName(team.."_security_clip")
+	-- get the clip entities
+	local clips = Collection()
+	local clipname = team.."_security_clip"
+	clips:GetByName({clipname})
 
-	if clip then
+	for clip in clips.items do
 		clip = CastToTriggerClip(clip)
-		-- clear flags, but send a dummy flag (for some reason with zero flags it blocks everything)
-		clip:SetClipFlags({ClipFlags.kClipTeamBlue})
+		if clip and _G[clipname] and _G[clipname].clipflags then
+			-- clear flags, but send a dummy flag (for some reason with zero flags it blocks everything)
+			clip:SetClipFlags({ClipFlags.kClipTeamBlue})
+		end
 	end
 end
 
@@ -59,13 +63,17 @@ function security_on( team )
 	OutputEvent(team.."_security_hurt", "Enable")
 	OutputEvent(team.."_laser_hurt", "Enable") -- a possible alias
 	
-	-- get the clip entity
-	local clip = GetEntityByName(team.."_security_clip")
+	-- get the clip entities
+	local clips = Collection()
+	local clipname = team.."_security_clip"
+	clips:GetByName({clipname})
 
-	if clip then
+	for clip in clips.items do
 		clip = CastToTriggerClip(clip)
-		-- reset flags to normal
-		clip:SetClipFlags(_G[clipname].clipflags)
+		if clip and _G[clipname] and _G[clipname].clipflags then
+			-- reset flags to normal
+			clip:SetClipFlags(_G[clipname].clipflags)
+		end
 	end
 end
 
@@ -233,6 +241,13 @@ blue_security_hurt = not_blue_trigger:new({})
 -- the trigger_hurts can also be named like this
 red_laser_hurt = red_security_hurt
 blue_laser_hurt = blue_security_hurt
+
+-----------------------------------------------------------------------------
+-- Clips
+-----------------------------------------------------------------------------
+
+red_security_clip = clip_red:new()
+blue_security_clip = clip_blue:new()
 
 -------------------------
 -- flaginfo
