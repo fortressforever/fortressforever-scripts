@@ -127,12 +127,18 @@ blue_dspawn = { validspawn = blue_d_only }
 red_sec = red_security_trigger:new()
 blue_sec = blue_security_trigger:new()
 
-local security_off_base = security_off or function() end
+-- utility function for getting the name of the opposite team, 
+-- where team is a string, like "red"
+local function get_opposite_team(team)
+	if team == "red" then return "blue" else return "red" end
+end
+
+local security_off_base = security_off
 function security_off( team )
 	security_off_base( team )
 
 	OpenDoor(team.."_secdoor")
-	local opposite_team = team == "red" and "blue" or "red"
+	local opposite_team = get_opposite_team(team)
 	OutputEvent("sec_"..opposite_team.."_slayer", "Disable")
 
 	AddSchedule("secup10"..team, SECURITY_LENGTH - 10, function()
@@ -143,12 +149,12 @@ function security_off( team )
 	end)
 end
 
-local security_on_base = security_on or function() end
+local security_on_base = security_on
 function security_on( team )
 	security_on_base( team )
 
 	CloseDoor(team.."_secdoor")
-	local opposite_team = team == "red" and "blue" or "red"
+	local opposite_team = get_opposite_team(team)
 	OutputEvent("sec_"..opposite_team.."_slayer", "Enable")
 end
 
