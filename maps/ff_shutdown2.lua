@@ -8,7 +8,7 @@ IncludeScript("base_shutdown");
 SECURITY_LENGTH = 60
 
 -----------------------------------------------------------------------------
--- aardvark security
+-- security
 -----------------------------------------------------------------------------
 red_aardvarksec = red_security_trigger:new()
 blue_aardvarksec = blue_security_trigger:new()
@@ -19,7 +19,7 @@ function security_off( team )
 
 	OpenDoor(team.."_aardvarkdoorhack")
 
-	AddSchedule("aardvarksecup10"..team, SECURITY_LENGTH - 10, function()
+	AddSchedule("secup10"..team, SECURITY_LENGTH - 10, function()
 		BroadCastMessage("#FF_"..team:upper().."_SEC_10")
 	end)
 end

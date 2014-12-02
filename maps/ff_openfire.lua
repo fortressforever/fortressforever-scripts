@@ -56,7 +56,7 @@ blue_aardvarkresup = aardvarkresup:new({ team = Team.kBlue })
 red_aardvarkresup = aardvarkresup:new({ team = Team.kRed })
 
 -----------------------------------------------------------------------------
--- aardvark security
+-- security
 -----------------------------------------------------------------------------
 red_aardvarksec = red_security_trigger:new()
 blue_aardvarksec = blue_security_trigger:new()
@@ -69,7 +69,7 @@ function security_off( team )
 	local opposite_team = team == "red" and "blue" or "red"
 	OutputEvent("sec_"..opposite_team.."_slayer", "Disable")
 
-	AddSchedule("aardvarksecup10"..team, SECURITY_LENGTH - 10, function()
+	AddSchedule("secup10"..team, SECURITY_LENGTH - 10, function()
 		BroadCastMessage("#FF_"..team:upper().."_SEC_10")
 	end)
 end
@@ -84,7 +84,7 @@ function security_on( team )
 end
 
 -----------------------------------------------------------------------------
--- aardvark lasers and respawn shields
+-- lasers and respawn shields
 -----------------------------------------------------------------------------
 blue_slayer = not_red_trigger:new()
 red_slayer = not_blue_trigger:new()

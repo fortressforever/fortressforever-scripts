@@ -162,7 +162,7 @@ function security_off( team )
 	local opposite_team = team == "red" and "blue" or "red"
 	OutputEvent("sec_"..opposite_team.."_slayer", "Disable")
 
-	AddSchedule("aardvarksecup10"..team, SECURITY_LENGTH - 10, function()
+	AddSchedule("secup10"..team, SECURITY_LENGTH - 10, function()
 		BroadCastMessage("#FF_"..team:upper().."_SEC_10")
 	end)
 end
