@@ -99,20 +99,8 @@ red_windowpack = windowpack:new({ touchflags = { AllowFlags.kOnlyPlayers, AllowF
 -- kills those who wander into the enemy spawn
 -----------------------------------------------------------------------------
 
-spawn_protection = trigger_ff_script:new({ team = Team.kUnassigned })
-
-function spawn_protection:allowed( activator )
-	local player = CastToPlayer( activator )
-	if player then
-		if player:GetTeamId() == self.team then
-			return EVENT_ALLOWED
-		end
-	end
-	return EVENT_DISALLOWED
-end
-
-red_spawn_protection = spawn_protection:new({ team = Team.kBlue })
-blue_spawn_protection = spawn_protection:new({ team = Team.kRed })
+red_spawn_protection = not_red_trigger:new()
+blue_spawn_protection = not_blue_trigger:new()
 
 -----------------------------------------------------------------------------
 -- OFFENSIVE AND DEFENSIVE SPAWNS
@@ -136,84 +124,32 @@ blue_dspawn = { validspawn = blue_d_only }
 --  AND THEN, SOME MORE STUFF...
 -----------------------------------------------------------------------------
 
-red_sec = trigger_ff_script:new()
-blue_sec = trigger_ff_script:new()
-bluesecstatus = 1
-redsecstatus = 1
+red_sec = red_security_trigger:new()
+blue_sec = blue_security_trigger:new()
 
-sec_iconx = 60
-sec_icony = 30
-sec_iconw = 16
-sec_iconh = 16
+local security_off_base = security_off or function() end
+function security_off( team )
+	security_off_base( team )
 
-function red_sec:ontouch( touch_entity )
-	if IsPlayer( touch_entity ) then
-		local player = CastToPlayer( touch_entity )
-		if player:GetTeamId() == Team.kBlue then
-			if redsecstatus == 1 then
-				redsecstatus = 0
-				AddSchedule("secup10red", SECURITY_LENGTH - 10, secup10red)
-				AddSchedule("beginclosered", SECURITY_LENGTH - 6, beginclosered)
-				AddSchedule("secupred",SECURITY_LENGTH,secupred)
-				OpenDoor("red_secdoor")
-				BroadCastMessage("#FF_RED_SEC_40")
-				SpeakAll( "SD_REDDOWN" )
-				RemoveHudItemFromAll( "red-sec-up" )
-				AddHudIconToAll( "hud_secdown.vtf", "red-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-			end
-		end
-	end
+	OpenDoor(team.."_secdoor")
+	local opposite_team = team == "red" and "blue" or "red"
+	OutputEvent("sec_"..opposite_team.."_slayer", "Disable")
+
+	AddSchedule("aardvarksecup10"..team, SECURITY_LENGTH - 10, function()
+		BroadCastMessage("#FF_"..team:upper().."_SEC_10")
+	end)
+	AddSchedule("beginclose"..team, SECURITY_LENGTH - 6, function()
+		CloseDoor(team.."_secdoor")
+	end)
 end
 
-function blue_sec:ontouch( touch_entity )
-	if IsPlayer( touch_entity ) then
-		local player = CastToPlayer( touch_entity )
-		if player:GetTeamId() == Team.kRed then
-			if bluesecstatus == 1 then
-				bluesecstatus = 0
-				AddSchedule("secup10blue", SECURITY_LENGTH - 10, secup10blue)
-				AddSchedule("begincloseblue", SECURITY_LENGTH - 6, begincloseblue)
-				AddSchedule("secupblue",SECURITY_LENGTH,secupblue)
-				OpenDoor("blue_secdoor")
-				BroadCastMessage("#FF_BLUE_SEC_40")
-				SpeakAll( "SD_BLUEDOWN" )
-				RemoveHudItemFromAll( "blue-sec-up" )
-				AddHudIconToAll( "hud_secdown.vtf", "blue-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-			end
-		end
-	end
-end
+local security_on_base = security_on or function() end
+function security_on( team )
+	security_on_base( team )
 
-function secupred()
-	redsecstatus = 1
-	BroadCastMessage("#FF_RED_SEC_ON")
-	SpeakAll( "SD_REDUP" )
-	RemoveHudItemFromAll( "red-sec-down" )
-	AddHudIconToAll( "hud_secup_red.vtf", "red-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-end
-
-function begincloseblue()
-	CloseDoor("blue_secdoor")
-end
-
-function beginclosered()
-	CloseDoor("red_secdoor")
-end
-
-function secupblue()
-	bluesecstatus = 1
-	BroadCastMessage("#FF_BLUE_SEC_ON")
-	SpeakAll( "SD_BLUEUP" )
-	RemoveHudItemFromAll( "blue-sec-down" )
-	AddHudIconToAll( "hud_secup_blue.vtf", "blue-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-end
-
-function secup10red()
-	BroadCastMessage("#FF_RED_SEC_10")
-end
-
-function secup10blue()
-	BroadCastMessage("#FF_BLUE_SEC_10")
+	CloseDoor(team.."_secdoor")
+	local opposite_team = team == "red" and "blue" or "red"
+	OutputEvent("sec_"..opposite_team.."_slayer", "Enable")
 end
 
 grp = bigpack:new({
@@ -222,29 +158,3 @@ gren1=4,gren2=4,model=
 "models/items/backpack/backpack.mdl",
 respawntime=1,touchsound="Backpack.Touch"})
 function grp:dropatspawn() return false end
-
--------------------------
--- flaginfo
--------------------------
-function flaginfo( player_entity )
-	local player = CastToPlayer( player_entity )
-
-	flaginfo_base(player_entity) --basic CTF HUD items
-
-	RemoveHudItem( player, "red-sec-down" )
-	RemoveHudItem( player, "blue-sec-down" )
-	RemoveHudItem( player, "red-sec-up" )
-	RemoveHudItem( player, "blue-sec-up" )
-
-	if bluesecstatus == 1 then
-		AddHudIcon( player, "hud_secup_blue.vtf", "blue-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-	else
-		AddHudIcon( player, "hud_secdown.vtf", "blue-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-	end
-
-	if redsecstatus == 1 then
-		AddHudIcon( player, "hud_secup_red.vtf", "red-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-	else
-		AddHudIcon( player, "hud_secdown.vtf", "red-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-	end
-end

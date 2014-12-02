@@ -165,7 +165,7 @@ button_blue = button_common:new({
 -- Button responses 
 -----------------------------------------------------------------------------
 function button_blue:onin() 
-	if SECURITY_LENGTH == 60 or SECURITY_LENGTH == 30 then
+	if SECURITY_LENGTH == 60 or SECURITY_LENGTH == 30 or SECURITY_LENGTH == 40 then
 		BroadCastMessage( "#FF_BLUE_SEC_"..SECURITY_LENGTH )
 	else
 		BroadCastMessage( "#FF_BLUE_SECURITY_DEACTIVATED" )
