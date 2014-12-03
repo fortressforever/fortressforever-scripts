@@ -98,6 +98,29 @@ no_annoyances = noannoyances
 spawn_protection = noannoyances
 
 -----------------------------------------------------------------------------
+-- Useful trigger definitions
+-----------------------------------------------------------------------------
+
+-- team only triggers
+team_only_trigger = trigger_ff_script:new({ team = Team.kUnassigned, allow = true })
+function team_only_trigger:allowed( allowed_entity ) if allowed_entity and IsPlayer(allowed_entity) and CastToPlayer(allowed_entity):GetTeamId() == self.team then return self.allow else return not self.allow end end
+
+-- triggers that allow any team except the given team
+not_team_only_trigger = team_only_trigger:new({allow = false})
+
+-- allow only if on the team
+red_trigger = team_only_trigger:new({ team = Team.kRed })
+blue_trigger = team_only_trigger:new({ team = Team.kBlue })
+yellow_trigger = team_only_trigger:new({ team = Team.kYellow })
+green_trigger = team_only_trigger:new({ team = Team.kGreen })
+
+-- allow only if not on the team
+not_red_trigger = not_team_only_trigger:new({ team = Team.kRed })
+not_blue_trigger = not_team_only_trigger:new({ team = Team.kBlue })
+not_yellow_trigger = not_team_only_trigger:new({ team = Team.kYellow })
+not_green_trigger = not_team_only_trigger:new({ team = Team.kGreen })
+
+-----------------------------------------------------------------------------
 -- Trigger_ff_clips
 -----------------------------------------------------------------------------
 

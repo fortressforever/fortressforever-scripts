@@ -8,14 +8,14 @@ SNIPER_LIMIT = 1;
 -----------------------------------------------------------------------------
 -- includes
 -----------------------------------------------------------------------------
-IncludeScript("base");
-IncludeScript("base_ctf");
+IncludeScript("base_shutdown");
 IncludeScript("base_location");
 -----------------------------------------------------------------------------
 -- global overrides
 -----------------------------------------------------------------------------
 POINTS_PER_CAPTURE = 10;
 FLAG_RETURN_TIME = 60;
+SECURITY_LENGTH = 30;
 
 -----------------------------------------------------------------------------
 -- unique aardvark locations
@@ -59,23 +59,14 @@ location_midmap = location_info:new({ text = "Outside", team = NO_TEAM })
 -----------------------------------------------------------------------------
 -- set class limits
 -----------------------------------------------------------------------------
+local startup_base = startup or function() end
 function startup()
-	SetGameDescription("Capture the Flag")
-	
-	-- set up team limits on each team
-	SetPlayerLimit(Team.kBlue, 0)
-	SetPlayerLimit(Team.kRed, 0)
-	SetPlayerLimit(Team.kYellow, -1)
-	SetPlayerLimit(Team.kGreen, -1)
+	startup_base()
 
-	-- CTF maps generally don't have civilians,
-	-- so override in map LUA file if you want 'em
 	local team = GetTeam(Team.kBlue)
-	team:SetClassLimit(Player.kCivilian, -1)
 	team:SetClassLimit(Player.kSniper, SNIPER_LIMIT)
 
 	team = GetTeam(Team.kRed)
-	team:SetClassLimit(Player.kCivilian, -1)
 	team:SetClassLimit(Player.kSniper, SNIPER_LIMIT)
 end
 
@@ -160,142 +151,42 @@ red_aardvarkresup = aardvarkresup:new({ team = Team.kRed })
 -----------------------------------------------------------------------------
 -- aardvark security
 -----------------------------------------------------------------------------
-red_aardvarksec = trigger_ff_script:new()
-blue_aardvarksec = trigger_ff_script:new()
-bluesecstatus = 1
-redsecstatus = 1
+red_aardvarksec = red_security_trigger:new()
+blue_aardvarksec = blue_security_trigger:new()
 
-sec_iconx = 60
-sec_icony = 30
-sec_iconw = 16
-sec_iconh = 16
-
-function red_aardvarksec:ontouch( touch_entity )
-	if IsPlayer( touch_entity ) then
-		local player = CastToPlayer( touch_entity )
-		if player:GetTeamId() == Team.kBlue then
-			if redsecstatus == 1 then
-				redsecstatus = 0
-				AddSchedule("aardvarksecup10red",20,aardvarksecup10red)
-				AddSchedule("aardvarksecupred",30,aardvarksecupred)
-				OpenDoor("red_aardvarkdoorhack")
-				BroadCastMessage("#FF_RED_SEC_30")
-				--BroadCastSound( "otherteam.flagstolen")
-				SpeakAll( "SD_REDDOWN" )
-				RemoveHudItemFromAll( "red-sec-up" )
-				AddHudIconToAll( "hud_secdown.vtf", "red-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-			end
-		end
-	end
+-- utility function for getting the name of the opposite team, 
+-- where team is a string, like "red"
+local function get_opposite_team(team)
+	if team == "red" then return "blue" else return "red" end
 end
 
-function blue_aardvarksec:ontouch( touch_entity )
-	if IsPlayer( touch_entity ) then
-		local player = CastToPlayer( touch_entity )
-		if player:GetTeamId() == Team.kRed then
-			if bluesecstatus == 1 then
-				bluesecstatus = 0
-				AddSchedule("aardvarksecup10blue",20,aardvarksecup10blue)
-				AddSchedule("aardvarksecupblue",30,aardvarksecupblue)
-				OpenDoor("blue_aardvarkdoorhack")
-				BroadCastMessage("#FF_BLUE_SEC_30")
-				--BroadCastSound( "otherteam.flagstolen")
-				SpeakAll( "SD_BLUEDOWN" )
-				RemoveHudItemFromAll( "blue-sec-up" )
-				AddHudIconToAll( "hud_secdown.vtf", "blue-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-			end
-		end
-	end
+local security_off_base = security_off
+function security_off( team )
+	security_off_base( team )
+
+	OpenDoor(team.."_aardvarkdoorhack")
+	local opposite_team = get_opposite_team(team)
+	OutputEvent("sec_"..opposite_team.."_slayer", "Disable")
+
+	AddSchedule("secup10"..team, SECURITY_LENGTH - 10, function()
+		BroadCastMessage("#FF_"..team:upper().."_SEC_10")
+	end)
 end
 
-function aardvarksecupred()
-	redsecstatus = 1
-	CloseDoor("red_aardvarkdoorhack")
-	BroadCastMessage("#FF_RED_SEC_ON")
-	SpeakAll( "SD_REDUP" )
-	RemoveHudItemFromAll( "red-sec-down" )
-	AddHudIconToAll( "hud_secup_red.vtf", "red-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-end
+local security_on_base = security_on
+function security_on( team )
+	security_on_base( team )
 
-function aardvarksecupblue()
-	bluesecstatus = 1
-	CloseDoor("blue_aardvarkdoorhack")
-	BroadCastMessage("#FF_BLUE_SEC_ON")
-	SpeakAll( "SD_BLUEUP" )
-	RemoveHudItemFromAll( "blue-sec-down" )
-	AddHudIconToAll( "hud_secup_blue.vtf", "blue-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-end
-
-function aardvarksecup10red()
-	BroadCastMessage("#FF_RED_SEC_10")
-end
-
-function aardvarksecup10blue()
-	BroadCastMessage("#FF_BLUE_SEC_10")
+	CloseDoor(team.."_aardvarkdoorhack")
+	local opposite_team = get_opposite_team(team)
+	OutputEvent("sec_"..opposite_team.."_slayer", "Enable")
 end
 
 -----------------------------------------------------------------------------
--- aardvark lasers and respawn shields
+-- respawn shields
 -----------------------------------------------------------------------------
-KILL_KILL_KILL = trigger_ff_script:new({ team = Team.kUnassigned })
-lasers_KILL_KILL_KILL = trigger_ff_script:new({ team = Team.kUnassigned })
+blue_slayer = not_red_trigger:new()
+red_slayer = not_blue_trigger:new()
+sec_blue_slayer = not_red_trigger:new()
+sec_red_slayer = not_blue_trigger:new()
 
-function KILL_KILL_KILL:allowed( activator )
-	local player = CastToPlayer( activator )
-	if player then
-		if player:GetTeamId() == self.team then
-			return EVENT_ALLOWED
-		end
-	end
-	return EVENT_DISALLOWED
-end
-
-function lasers_KILL_KILL_KILL:allowed( activator )
-	local player = CastToPlayer( activator )
-	if player then
-		if player:GetTeamId() == self.team then
-			if self.team == Team.kBlue then
-				if redsecstatus == 1 then
-					return EVENT_ALLOWED
-				end
-			end
-			if self.team == Team.kRed then
-				if bluesecstatus == 1 then
-					return EVENT_ALLOWED
-				end
-			end
-		end
-	end
-	return EVENT_DISALLOWED
-end
-
-blue_slayer = KILL_KILL_KILL:new({ team = Team.kBlue })
-red_slayer = KILL_KILL_KILL:new({ team = Team.kRed })
-sec_blue_slayer = lasers_KILL_KILL_KILL:new({ team = Team.kBlue })
-sec_red_slayer = lasers_KILL_KILL_KILL:new({ team = Team.kRed })
-
--------------------------
--- flaginfo
--------------------------
-function flaginfo( player_entity )
-	local player = CastToPlayer( player_entity )
-
-	flaginfo_base(player_entity) --basic CTF HUD items
-
-	RemoveHudItem( player, "red-sec-down" )
-	RemoveHudItem( player, "blue-sec-down" )
-	RemoveHudItem( player, "red-sec-up" )
-	RemoveHudItem( player, "blue-sec-up" )
-
-	if bluesecstatus == 1 then
-		AddHudIcon( player, "hud_secup_blue.vtf", "blue-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-	else
-		AddHudIcon( player, "hud_secdown.vtf", "blue-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 2 )
-	end
-
-	if redsecstatus == 1 then
-		AddHudIcon( player, "hud_secup_red.vtf", "red-sec-up", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-	else
-		AddHudIcon( player, "hud_secdown.vtf", "red-sec-down", sec_iconx, sec_icony, sec_iconw, sec_iconh, 3 )
-	end
-end
