@@ -1,14 +1,19 @@
 "Options"
 {
-	"heading"
-	{
-		"caption"	"#GameUI_HeadsUpDisplayHeading"
-	}
-
 		"tchud"
 		{
 			"caption"	"#GameUI_TeamColorHUD"
 			"cvar"		"cl_teamcolourhud"
+		}
+		"hud_showweaponselect"
+		{
+			"caption"	"#GameUI_ShowWeaponSelect"
+			"cvar"		"hud_weaponselect"
+		}
+		"hud_fastswitch"
+		{
+			"caption"	"#GameUI_FastSwitch"
+			"cvar"		"hud_fastswitch"
 		}
 		"hud_centerid"
 		{
@@ -30,11 +35,6 @@
 			"caption"	"#GameUI_ShowAverageSpeedometer"
 			"cvar"		"hud_speedometer_avg"
 		}
-
-	"heading"
-	{
-		"caption"	"#GameUI_InGameMenusHeading"
-	}
 		"usemouse"
 		{
 			"caption"	"#GameUI_UseMouseIngameMenus"
