@@ -1,5 +1,6 @@
 -- base_ad.lua
 -- Attack / Defend gametype 
+-- Edited Last: Dr.Satan - 22/12/2014
 
 -----------------------------------------------------------------------------
 -- includes
@@ -20,6 +21,7 @@ if DEFENDERS == nil then DEFENDERS = Team.kRed; end
 --if MAP_LENGTH == nil then MAP_LENGTH = 1436; end -- 23 minutes 56 seconds, 4 seconds less than the default timelimit of 24 minutes.
 
 if ATTACKERS_OBJECTIVE_ENTITY == nil then ATTACKERS_OBJECTIVE_ENTITY = nil end
+if DEFENDERS_OBJECTIVE_ENTITY == nil then DEFENDERS_OBJECTIVE_ENTITY = nil end
 
 INITIAL_FUSE_TIMER = 80
 BLOW_CP1_ROUTE_TIMER = 300
@@ -94,8 +96,10 @@ function startup( )
 	AddSchedule("blow_cp2_extra_route", BLOW_CP2_ROUTE_TIMER, blow_cp2_extra_route )
 	
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
+	-- Satan: Defenders should always point to the cap and NOT the flag
+	DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
 	UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), ATTACKERS_OBJECTIVE_ENTITY )
+	UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), DEFENDERS_OBJECTIVE_ENTITY )
 end
 
 function blow_first_gate( )
@@ -168,11 +172,12 @@ function player_spawn( player_entity )
 		player:AddAmmo( Ammo.kCells, 200 )
 	end
 	
---	if player:GetTeamId() == ATTACKERS then
+	-- Satan: We need this to keep the DEFENDERS pointing at the cap
+	if player:GetTeamId() == ATTACKERS then
 		UpdateObjectiveIcon( player, ATTACKERS_OBJECTIVE_ENTITY )
---	elseif player:GetTeamId() == DEFENDERS then
---		UpdateObjectiveIcon( player, nil )
---	end
+	elseif player:GetTeamId() == DEFENDERS then
+		UpdateObjectiveIcon( player, DEFENDERS_OBJECTIVE_ENTITY )
+	end
 end
 
 function addpoints( )
@@ -273,7 +278,6 @@ function base_ad_flag:touch( touch_entity )
 			-- change objective icons
 			ATTACKERS_OBJECTIVE_ENTITY = player
 			UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
-			UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), ATTACKERS_OBJECTIVE_ENTITY )
 			UpdateObjectiveIcon( player, GetEntityByName( "cp"..self.phase.."_cap" ) )
 			
 			LogLuaEvent(player:GetId(), 0, "flag_touch", "flag_name", flag:GetName(), "player_origin", (string.format("%0.2f",player:GetOrigin().x) .. ", " .. string.format("%0.2f",player:GetOrigin().y) .. ", " .. string.format("%0.1f",player:GetOrigin().z) ), "player_health", "" .. player:GetHealth());
@@ -306,7 +310,6 @@ function base_ad_flag:onownerdie( owner_entity )
 		ATTACKERS_OBJECTIVE_ENTITY = flag
 		UpdateObjectiveIcon( player, nil )
 		UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
-		UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), ATTACKERS_OBJECTIVE_ENTITY )
 		
 		-- remove flag icon from hud
 		RemoveHudItem( player, flag:GetName() )
@@ -335,7 +338,6 @@ function base_ad_flag:onreturn( )
 	-- change objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
 	UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), ATTACKERS_OBJECTIVE_ENTITY )
 	
 	LogLuaEvent(0, 0, "flag_returned","flag_name",flag:GetName());
 
@@ -403,8 +405,9 @@ function base_ad_cap:oncapture( player, item )
 
 	-- remove objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = nil
+	DEFENDERS_OBJECTIVE_ENTITY = nil
 	UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), ATTACKERS_OBJECTIVE_ENTITY )
+	UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), DEFENDERS_OBJECTIVE_ENTITY )
 
 	-- Remove previous phase flag
 	flag_remove( item )
@@ -438,6 +441,8 @@ function cap_delay_timer( cap )
 		
 		-- update objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
+		-- Satan: Defenders should always point to the cap and NOT the flag
+		DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
 
 		setup_door_timer( cap.doorname, cap.duration) 
 		ApplyToAll( { AT.kRemovePacks, AT.kRemoveProjectiles, AT.kRespawnPlayers, AT.kRemoveBuildables, AT.kRemoveRagdolls, AT.kStopPrimedGrens, AT.kReloadClips } )
