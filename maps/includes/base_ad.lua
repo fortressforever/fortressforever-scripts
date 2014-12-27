@@ -21,6 +21,11 @@ if DEFENDERS == nil then DEFENDERS = Team.kRed; end
 
 if ATTACKERS_OBJECTIVE_ENTITY == nil then ATTACKERS_OBJECTIVE_ENTITY = nil end
 if DEFENDERS_OBJECTIVE_ENTITY == nil then DEFENDERS_OBJECTIVE_ENTITY = nil end
+-- _ONCAP set to true; Defenders should always point to cap
+if DEFENDERS_OBJECTIVE_ONCAP == nil then DEFENDERS_OBJECTIVE_ONCAP = true end
+-- _OBJECTIVE_ONCARRIER and _ONFLAG set to false to keep objective on cap
+if DEFENDERS_OBJECTIVE_ONFLAG == nil then DEFENDERS_OBJECTIVE_ONFLAG = false end
+if DEFENDERS_OBJECTIVE_ONCARRIER == nil then DEFENDERS_OBJECTIVE_ONCARRIER = false end
 
 INITIAL_FUSE_TIMER = 80
 BLOW_CP1_ROUTE_TIMER = 300
@@ -95,10 +100,8 @@ function startup( )
 	AddSchedule("blow_cp2_extra_route", BLOW_CP2_ROUTE_TIMER, blow_cp2_extra_route )
 	
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	-- Defenders should always point to the cap and NOT the flag
-	DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), DEFENDERS_OBJECTIVE_ENTITY )
 end
 
 function blow_first_gate( )
@@ -171,7 +174,6 @@ function player_spawn( player_entity )
 		player:AddAmmo( Ammo.kCells, 200 )
 	end
 	
-	-- We need this to keep the DEFENDERS pointing at the cap
 	if player:GetTeamId() == ATTACKERS then
 		UpdateObjectiveIcon( player, ATTACKERS_OBJECTIVE_ENTITY )
 	elseif player:GetTeamId() == DEFENDERS then
@@ -276,6 +278,7 @@ function base_ad_flag:touch( touch_entity )
 		
 			-- change objective icons
 			ATTACKERS_OBJECTIVE_ENTITY = player
+			UpdateDefendersObjective()
 			UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
 			UpdateObjectiveIcon( player, GetEntityByName( "cp"..self.phase.."_cap" ) )
 			
@@ -307,6 +310,7 @@ function base_ad_flag:onownerdie( owner_entity )
 		
 		-- change objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = flag
+		UpdateDefendersObjective()
 		UpdateObjectiveIcon( player, nil )
 		UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
 		
@@ -336,6 +340,7 @@ function base_ad_flag:onreturn( )
 	
 	-- change objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
 	
 	LogLuaEvent(0, 0, "flag_returned","flag_name",flag:GetName());
@@ -440,8 +445,7 @@ function cap_delay_timer( cap )
 		
 		-- update objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-		-- Defenders should always point to the cap and NOT the flag
-		DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
+		UpdateDefendersObjective()
 
 		setup_door_timer( cap.doorname, cap.duration) 
 		ApplyToAll( { AT.kRemovePacks, AT.kRemoveProjectiles, AT.kRespawnPlayers, AT.kRemoveBuildables, AT.kRemoveRagdolls, AT.kStopPrimedGrens, AT.kReloadClips } )
@@ -623,6 +627,20 @@ function final_allowedmethod( self, player_entity )
 	local teamId = player:GetTeamId( ) 
 	
 	return (teamId == DEFENDERS and phase == 3)
+end
+
+function UpdateDefendersObjective()
+	-- Check to see what Defenders should be focused on and update 
+    local flag = GetInfoScriptByName("cp"..phase.."_flag")
+    local carried = flag:IsCarried()
+    if (not carried and DEFENDERS_OBJECTIVE_ONFLAG) or (carried and DEFENDERS_OBJECTIVE_ONCARRIER) then
+        DEFENDERS_OBJECTIVE_ENTITY = flag
+    elseif DEFENDERS_OBJECTIVE_ONCAP then
+        DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName("cp"..phase.."_cap")
+    else
+        DEFENDERS_OBJECTIVE_ENTITY = nil
+    end
+    UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 end
 
 
