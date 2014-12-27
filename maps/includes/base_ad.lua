@@ -1,6 +1,5 @@
 -- base_ad.lua
 -- Attack / Defend gametype 
--- Edited Last: Dr.Satan - 22/12/2014
 
 -----------------------------------------------------------------------------
 -- includes
@@ -96,7 +95,7 @@ function startup( )
 	AddSchedule("blow_cp2_extra_route", BLOW_CP2_ROUTE_TIMER, blow_cp2_extra_route )
 	
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	-- Satan: Defenders should always point to the cap and NOT the flag
+	-- Defenders should always point to the cap and NOT the flag
 	DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
 	UpdateTeamObjectiveIcon( GetTeam(ATTACKERS), ATTACKERS_OBJECTIVE_ENTITY )
 	UpdateTeamObjectiveIcon( GetTeam(DEFENDERS), DEFENDERS_OBJECTIVE_ENTITY )
@@ -172,7 +171,7 @@ function player_spawn( player_entity )
 		player:AddAmmo( Ammo.kCells, 200 )
 	end
 	
-	-- Satan: We need this to keep the DEFENDERS pointing at the cap
+	-- We need this to keep the DEFENDERS pointing at the cap
 	if player:GetTeamId() == ATTACKERS then
 		UpdateObjectiveIcon( player, ATTACKERS_OBJECTIVE_ENTITY )
 	elseif player:GetTeamId() == DEFENDERS then
@@ -441,7 +440,7 @@ function cap_delay_timer( cap )
 		
 		-- update objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-		-- Satan: Defenders should always point to the cap and NOT the flag
+		-- Defenders should always point to the cap and NOT the flag
 		DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
 
 		setup_door_timer( cap.doorname, cap.duration) 
