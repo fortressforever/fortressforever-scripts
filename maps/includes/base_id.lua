@@ -1,7 +1,6 @@
 
 -- base_id.lua
 -- Invade / Defend gametype 
--- Edited Last: Dr.Satan 23/12/2014
 
 -----------------------------------------------------------------------------
 -- includes
@@ -21,7 +20,7 @@ if onroundreset == nil then onroundreset = function() end end
 if FLAG_RETURN_TIME == nil then FLAG_RETURN_TIME = 60; end
 if ATTACKERS_OBJECTIVE_ENTITY == nil then ATTACKERS_OBJECTIVE_ENTITY = nil end
 if DEFENDERS_OBJECTIVE_ENTITY == nil then DEFENDERS_OBJECTIVE_ENTITY = nil end
--- Satan: DEFENDERS_OBJECTIVE_ONCARRIER and ONFLAG set to false to keep objective on cap
+-- DEFENDERS_OBJECTIVE_ONCARRIER and ONFLAG set to false to keep objective on cap
 if DEFENDERS_OBJECTIVE_ONFLAG == nil then DEFENDERS_OBJECTIVE_ONFLAG = false end
 if DEFENDERS_OBJECTIVE_ONCARRIER == nil then DEFENDERS_OBJECTIVE_ONCARRIER = false end
 if TEAM_SWITCH_DELAY == nil then TEAM_SWITCH_DELAY = 2 end
@@ -157,7 +156,7 @@ function baseflag:ownercloak( owner_entity )
 	
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) 
-	-- Satan: Check to see if we want to point to flag and do stuff
+	-- Check to see if we want to point to flag and do stuff
 	if DEFENDERS_OBJECTIVE_ONFLAG then
 		DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) 
 		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
@@ -187,7 +186,7 @@ function baseflag:dropitemcmd( owner_entity )
 
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	-- Satan: Check to see if we want to point to flag and do stuff
+	-- Check to see if we want to point to flag and do stuff
 	if DEFENDERS_OBJECTIVE_ONFLAG then
 		DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) 
 		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
@@ -211,7 +210,7 @@ function baseflag:onownerforcerespawn( owner_entity )
 	
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	-- Satan: Check to see if we want to point to flag and do stuff
+	-- Check to see if we want to point to flag and do stuff
 	if DEFENDERS_OBJECTIVE_ONFLAG then
 		DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) 
 		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
@@ -236,7 +235,7 @@ function baseflag:onreturn( )
 
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
-	-- Satan: Check to see if we want to point to flag and do stuff
+	-- Check to see if we want to point to flag and do stuff
 	if DEFENDERS_OBJECTIVE_ONFLAG then
 		DEFENDERS_OBJECTIVE_ENTITY = flag
 		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
@@ -304,7 +303,7 @@ function startup()
 	flags_set_team( attackers )
 	
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	-- Satan: Defenders should point to the cap and NOT the flag to avoid tracing the flag holder 
+	-- Defenders should point to the cap and NOT the flag to avoid tracing the flag holder 
 	DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
 	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
@@ -450,12 +449,12 @@ function base_id_flag:touch( touch_entity )
 			-- change objective icons
 			ATTACKERS_OBJECTIVE_ENTITY = player
 			if DEFENDERS_OBJECTIVE_ONFLAG then 
-				-- Satan: we want to target the flag ONLY when it's not being carried, so show D the cap instead 
+				-- we want to target the flag ONLY when it's not being carried, so show D the cap instead 
 				DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..self.phase.."_cap" ) 
 				UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 			end
 			if DEFENDERS_OBJECTIVE_ONCARRIER then 
-				-- Satan: we want to target the flag, even if it's being carried (not suggested as D can wallhack)
+				-- we want to target the flag, even if it's being carried (not suggested as D can wallhack)
 				DEFENDERS_OBJECTIVE_ENTITY = player 
 				UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 			end
@@ -487,7 +486,7 @@ function base_id_flag:onownerdie( owner_entity )
 	
 	-- change objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
-	-- Satan: Check to see if we want to point to flag and do stuff
+	-- Check to see if we want to point to flag and do stuff
 	if DEFENDERS_OBJECTIVE_ONFLAG then
 		DEFENDERS_OBJECTIVE_ENTITY = flag
 		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
