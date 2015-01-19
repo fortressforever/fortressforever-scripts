@@ -6,6 +6,10 @@ FLAG_RETURN_TIME = 60;
 INITIAL_ROUND_DELAY = 45;
 TEAM_SWITCH_DELAY = 4
 NUM_PHASES = 4
+
+DEFENDERS_OBJECTIVE_ONCAP = true
+DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
+DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
 -----------------------------------------------------------------------------
 
 -- sounds, right?
@@ -17,10 +21,6 @@ end
 -- startup
 function startup()
 	SetGameDescription("Invade Defend")
-	
-	DEFENDERS_OBJECTIVE_ONCAP = true
-	DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
-	DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
 	
 	-- set up team limits
 	local team = GetTeam( Team.kBlue )

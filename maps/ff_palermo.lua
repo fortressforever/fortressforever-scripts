@@ -8,12 +8,16 @@ IncludeScript("base_id");
 IncludeScript("base_respawnturret");
 IncludeScript("base_location");
 
+-----------------------------------------------------------------------------
+-- globals
+-----------------------------------------------------------------------------
+
+DEFENDERS_OBJECTIVE_ONCAP = true
+DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
+DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
+
 function startup()
 	SetGameDescription( "Invade Defend" )
-	
-	DEFENDERS_OBJECTIVE_ONCAP = true
-	DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
-	DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
 	
 	-- set up team limits
 	local team = GetTeam( Team.kBlue )

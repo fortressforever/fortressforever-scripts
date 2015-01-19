@@ -8,6 +8,10 @@ TEAM_SWITCH_DELAY = 4
 NUM_PHASES = 3
 NONINITIAL_ROUND_DELAY = 45;
 RESPAWN_AFTER_CAP = false
+
+DEFENDERS_OBJECTIVE_ONCAP = true
+DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
+DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
 -----------------------------------------------------------------------------
 function respawnall()
 	BroadCastMessage( "Area Captured. Respawning..." )
@@ -23,10 +27,6 @@ end
 -- startup
 function startup()
 	SetGameDescription("Invade Defend")
-	
-	DEFENDERS_OBJECTIVE_ONCAP = true
-	DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
-	DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
 	
 	-- set up team limits
 	local team = GetTeam( Team.kBlue )
