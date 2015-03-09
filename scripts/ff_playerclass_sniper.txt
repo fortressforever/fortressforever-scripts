@@ -27,7 +27,6 @@ PlayerClassData
 	ArmamentsData
 	{
 		"weapon"	"ff_weapon_crowbar"
-		"weapon"	"ff_weapon_nailgun"
 		"weapon"	"ff_weapon_sniperrifle"
 		"weapon"	"ff_weapon_autorifle"
 	}
