@@ -1,21 +1,28 @@
-
 -- ff_palermo.lua
 
 -----------------------------------------------------------------------------
 -- includes
 -----------------------------------------------------------------------------
 
-IncludeScript("base_id_new");
+IncludeScript("base_id");
 IncludeScript("base_respawnturret");
 IncludeScript("base_location");
 
 -----------------------------------------------------------------------------
-
+-- globals
 -----------------------------------------------------------------------------
 
+DEFENDERS_OBJECTIVE_ONCAP = true
+DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
+DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
+
+-- custom startup
+local startup_base = startup
+
 function startup()
-	id_startup()
-	
+    startup_base()
+
+    -- palermo specific stuff
 	-- lower trigger_hurt damage in water
 	OutputEvent( "trigger_hurt", "SetDamage", "42" )
 end
@@ -103,8 +110,6 @@ function onroundreset()
 
 	attackers_palammotypeone.team = attackers
 	attackers_palgrenadepackone.team = attackers
-
-
 end
 
 bellbutton = func_button:new({}) 
