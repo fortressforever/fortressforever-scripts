@@ -29,6 +29,10 @@ if TEAM_SWITCH_DELAY == nil then TEAM_SWITCH_DELAY = 2 end
 if RESPAWN_AFTER_CAP == nil then RESPAWN_AFTER_CAP = false end
 if RESPAWN_DELAY == nil then RESPAWN_DELAY = 2 end
 
+-- round timer globals
+if ROUND_TIME_LIMIT == nil then ROUND_TIME_LIMIT = 240 end --4min
+if round_timeleft == nil then round_timeleft = nil end
+
 basecap = trigger_ff_script:new({
 	health = 100,
 	armor = 300,
@@ -273,6 +277,9 @@ function startup()
 
 	setup_door_timer("start_gate", INITIAL_ROUND_DELAY)
 
+	-- start the timer for the round timer
+	setup_round_timer( INITIAL_ROUND_DELAY )
+	
 	cp1_flag.enabled = true
 	for i,v in ipairs({"cp1_flag", "cp2_flag", "cp3_flag", "cp4_flag", "cp5_flag", "cp6_flag", "cp7_flag", "cp8_flag"}) do
 		local flag = GetInfoScriptByName(v)
@@ -509,7 +516,10 @@ function base_id_cap:oncapture(player, item)
 
 	local flag_item = GetInfoScriptByName( item )
 	RemoveHudItem( player, flag_item:GetName() )
-
+	
+	-- out with the old timer 
+	destroy_round_timer()
+	
 	-- turn off this flag
 	for i,v in ipairs(self.item) do
 		_G[v].enabled = nil
@@ -526,6 +536,9 @@ function base_id_cap:oncapture(player, item)
 		-- it's the last round. end and stuff
 		AddSchedule("team_switch_delay", TEAM_SWITCH_DELAY, round_end)
 	else
+		-- in with the new timer
+		setup_round_timer( ROUND_DELAY )
+		
 		if RESPAWN_AFTER_CAP then
 			AddSchedule("respawn_all", RESPAWN_DELAY, respawn_all)
 		else
@@ -546,6 +559,81 @@ function base_id_cap:oncapture(player, item)
 		update_hud()
 	end
 
+end
+
+------------------------
+-- Round Timer
+------------------------
+
+function setup_round_timer( duration )
+	--since this is called when the rounds begin
+	--round_timeleft should equal 0 initially
+	round_timeleft = 0
+	
+	--start the new round_timer and warning schedules
+	AddSchedule("round_timer_start", duration, round_timer_start)
+	AddSchedule("forceRoundEnd", ROUND_TIME_LIMIT+duration, forceRoundEnd)
+	
+	--Don't do vox as the gate opens because there's already an announcement
+	if ROUND_TIME_LIMIT >= 305 then AddSchedule("forceRoundWarn300", ROUND_TIME_LIMIT+duration-300, forceRoundWarn300) end
+	if ROUND_TIME_LIMIT >= 125 then AddSchedule("forceRoundWarn120", ROUND_TIME_LIMIT+duration-120, forceRoundWarn120) end
+	AddSchedule("forceRoundWarn30", ROUND_TIME_LIMIT+duration-30, forceRoundWarn30)
+	AddSchedule("forceRoundWarn10", ROUND_TIME_LIMIT+duration-10, forceRoundWarn10)
+	AddSchedule("forceRoundWarn9", ROUND_TIME_LIMIT+duration-9, forceRoundWarn9)
+	AddSchedule("forceRoundWarn8", ROUND_TIME_LIMIT+duration-8, forceRoundWarn8)
+	AddSchedule("forceRoundWarn7", ROUND_TIME_LIMIT+duration-7, forceRoundWarn7)
+	AddSchedule("forceRoundWarn6", ROUND_TIME_LIMIT+duration-6, forceRoundWarn6)
+	AddSchedule("forceRoundWarn5", ROUND_TIME_LIMIT+duration-5, forceRoundWarn5)
+	AddSchedule("forceRoundWarn4", ROUND_TIME_LIMIT+duration-4, forceRoundWarn4)
+	AddSchedule("forceRoundWarn3", ROUND_TIME_LIMIT+duration-3, forceRoundWarn3)
+	AddSchedule("forceRoundWarn2", ROUND_TIME_LIMIT+duration-2, forceRoundWarn2)
+	AddSchedule("forceRoundWarn1", ROUND_TIME_LIMIT+duration-1, forceRoundWarn1)
+end
+
+function destroy_round_timer()
+	--removes the round timer and warning schedules
+	RemoveSchedule("round_timer_schedule")
+	RemoveSchedule("forceRoundEnd")
+	RemoveSchedule("forceRoundWarn300")
+	RemoveSchedule("forceRoundWarn120")
+	RemoveSchedule("forceRoundWarn30")
+	RemoveSchedule("forceRoundWarn10")
+	RemoveSchedule("forceRoundWarn9")
+	RemoveSchedule("forceRoundWarn8")
+	RemoveSchedule("forceRoundWarn7")
+	RemoveSchedule("forceRoundWarn6")
+	RemoveSchedule("forceRoundWarn5")
+	RemoveSchedule("forceRoundWarn4")
+	RemoveSchedule("forceRoundWarn3")
+	RemoveSchedule("forceRoundWarn2")
+	RemoveSchedule("forceRoundWarn1")
+	round_timeleft = 0
+end
+
+function round_timer_start()
+	round_timeleft = ROUND_TIME_LIMIT 
+	AddScheduleRepeating( "round_timer_schedule", 1, round_timer_schedule)
+	round_timer_HUD()
+end
+
+
+function round_timer_schedule()
+	round_timeleft = round_timeleft - 1
+	if round_timeleft <= 45 then update_hud() end
+	if round_timeleft < 0 then round_timeleft = 0 end
+end
+
+function forceRoundEnd()
+	BroadCastMessage("#ADZ_Switch")
+	
+	-- cancel any flag action
+	RemoveHudItemFromAll(current_flag)
+	local flag = GetInfoScriptByName("cp"..phase.."_flag")
+	if flag then 
+		flag:Remove()
+	end
+	
+	round_end()
 end
 
 function respawn_all()
@@ -593,6 +681,10 @@ function round_end()
 		RespawnAllPlayers()
 		setup_door_timer("start_gate", INITIAL_ROUND_DELAY)
 		
+		-- out with the old timer, in with the new
+		destroy_round_timer()
+		setup_round_timer( INITIAL_ROUND_DELAY )
+		
 		-- run custom round reset stuff
 		onroundreset()
 		update_hud()
@@ -612,6 +704,63 @@ function round_start(doorname)
 end
 function round_30secwarn() BroadCastMessage("#FF_ROUND_30SECWARN") end
 function round_10secwarn() BroadCastMessage("#FF_ROUND_10SECWARN") end
+
+----------------------------
+-- Timer Warning Messages
+----------------------------
+
+function forceRoundWarn300()
+	BroadCastMessage("#ADZ_Switch5Min")
+	SpeakAll("AD_300SEC")
+end
+function forceRoundWarn120()
+	BroadCastMessage("#ADZ_Switch2Min")
+	SpeakAll("AD_120SEC")
+end
+function forceRoundWarn30()
+	BroadCastMessage("#ADZ_Switch30Sec")
+	SpeakAll("AD_30SEC")
+end
+function forceRoundWarn10()
+	BroadCastMessage("#ADZ_Switch10Sec")
+	SpeakAll("AD_10SEC")
+end
+function forceRoundWarn9()
+	BroadCastMessage("9")
+	SpeakAll("AD_9SEC")
+end
+function forceRoundWarn8()
+	BroadCastMessage("8")
+	SpeakAll("AD_8SEC")
+end
+function forceRoundWarn7()
+	BroadCastMessage("7")
+	SpeakAll("AD_7SEC")
+end
+function forceRoundWarn6()
+	BroadCastMessage("6")
+	SpeakAll("AD_6SEC")
+end
+function forceRoundWarn5()
+	BroadCastMessage("5")
+	SpeakAll("AD_5SEC")
+end
+function forceRoundWarn4()
+	BroadCastMessage("4")
+	SpeakAll("AD_4SEC")
+end
+function forceRoundWarn3()
+	BroadCastMessage("3")
+	SpeakAll("AD_3SEC")
+end
+function forceRoundWarn2()
+	BroadCastMessage("2")
+	SpeakAll("AD_2SEC")
+end
+function forceRoundWarn1()
+	BroadCastMessage("1")
+	SpeakAll("AD_1SEC")
+end
 
 function flag_start(flagname)
 	BroadCastMessage("#AD_FlagAtBase")
@@ -674,7 +823,7 @@ function UpdateDefendersObjective()
 end
 
 ------------------------------------------------
--- instanciate them
+-- instantiate them
 ------------------------------------------------
 cp1_flag = base_id_flag:new({phase = 1})
 cp2_flag = base_id_flag:new({phase = 2})
@@ -719,12 +868,29 @@ cp8_defender = base_defender_spawn:new({phase=8})
 ------------------------------------------------
 -- hud info
 ------------------------------------------------
+
+function round_timer_HUD()
+	RemoveHudItemFromAll("round_timer")
+	RemoveHudItemFromAll("round_timer_text")
+	if round_timeleft > 0 then
+		if round_timeleft <= 45 then
+			-- only add round_timer_text, schedules will handle the rest from here
+			AddHudTextToAll("round_timer_text", "Round Time", 40, od_hudstatusicony, 2, 0, 2)
+		else
+			AddHudTextToAll("round_timer_text", "Round Time", 40, od_hudstatusicony, 2, 0, 2)
+			AddHudTimerToAll("round_timer", round_timeleft, -1, 40, od_hudstatusicony+10, 2, 0, 3)
+		end
+	end
+end
+
 function flaginfo( player_entity )
 
 	local player = CastToPlayer( player_entity )
 
 	local flag = GetInfoScriptByName("cp"..phase.."_flag")
 	local flagname = flag:GetName()
+	
+	round_timer_HUD()
 	
 	--RemoveHudItemFromAll( "background" )
 	--AddHudIconToAll( "hud_statusbar_256_128.vtf", "background", -64, 32, 128, 70, 3 )
@@ -831,6 +997,8 @@ function update_hud()
 
 	local flag = GetInfoScriptByName("cp"..phase.."_flag")
 	local flagname = flag:GetName()
+	
+	round_timer_HUD()
 	
 	--RemoveHudItemFromAll( "background" )
 	--AddHudIconToAll( "hud_statusbar_256_128.vtf", "background", -64, 32, 128, 70, 3 )

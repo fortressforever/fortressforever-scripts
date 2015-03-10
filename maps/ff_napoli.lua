@@ -68,6 +68,9 @@ function startup()
 	-- start the timer for the points
 	AddScheduleRepeating("addpoints", PERIOD_TIME, addpoints)
 
+	-- start the timer for the round timer
+	setup_round_timer( INITIAL_ROUND_DELAY )
+	
 	setup_door_timer("start_gate", INITIAL_ROUND_DELAY)
 	if INITIAL_ROUND_DELAY > 30 then AddSchedule( "dooropen30sec" , INITIAL_ROUND_DELAY - 30 , schedulemessagetoall, "Gates open in 30 seconds!" ) end
 	if INITIAL_ROUND_DELAY > 10 then AddSchedule( "dooropen10sec" , INITIAL_ROUND_DELAY - 10 , schedulemessagetoall, "Gates open in 10 seconds!" ) end
@@ -166,6 +169,9 @@ function base_id_cap:oncapture(player, item)
 		-- it's the last round. end and stuff
 		phase = 1
 
+		--kill the old timer, just in case
+		destroy_round_timer()
+		
 		OutputEvent( "start_gate", "Close" )	
 		
 		AddSchedule("switch_teams", TEAM_SWITCH_DELAY, switch_teams)
@@ -190,6 +196,10 @@ function base_id_cap:oncapture(player, item)
 		OutputEvent( "start_gate", "Close" )	
 		setup_door_timer("start_gate", NONINITIAL_ROUND_DELAY)	
 		
+		-- out with the old timer, in with the new
+		destroy_round_timer()
+		setup_round_timer( NONINITIAL_ROUND_DELAY )
+		
 		-- clear objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = nil
 		UpdateDefendersObjective()
@@ -209,6 +219,13 @@ function switch_teams()
 		attackers = Team.kBlue
 		defenders = Team.kRed
 	end
+	
+	--cancel any flag action
+	local flag = GetInfoScriptByName(current_flag)
+	if flag then 
+		flag:Remove()
+	end
+	RemoveHudItemFromAll(current_flag)
 	
 	-- set all flag teams to new attackers
 	flags_set_team( attackers )
@@ -237,6 +254,10 @@ function switch_teams()
 	-- respawn the players
 	RespawnAllPlayers()
 	setup_door_timer("start_gate", INITIAL_ROUND_DELAY)
+	
+	-- out with the old timer, in with the new
+	destroy_round_timer()
+	setup_round_timer( INITIAL_ROUND_DELAY )
 	
 	-- run custom round reset stuff
 	onroundreset()
@@ -364,6 +385,17 @@ end
 ---------------------------------------
 --Resetting round
 ------------------------------------
+
+function forceRoundEnd()
+	-- end and stuff
+	phase = 1
+	
+	OutputEvent( "start_gate", "Close" )
+	BroadCastMessage("#ADZ_Switch")
+	
+	AddSchedule("switch_teams", 0, switch_teams)
+end
+
 detpack_wall_open = nil
 
 function onroundreset()
