@@ -8,6 +8,10 @@ TEAM_SWITCH_DELAY = 4
 NUM_PHASES = 3
 NONINITIAL_ROUND_DELAY = 45;
 RESPAWN_AFTER_CAP = false
+
+DEFENDERS_OBJECTIVE_ONCAP = true
+DEFENDERS_OBJECTIVE_ONCARRIER = false --set to true to follow flag when carried
+DEFENDERS_OBJECTIVE_ONFLAG = false --set to true to follow flag ALWAYS
 -----------------------------------------------------------------------------
 function respawnall()
 	BroadCastMessage( "Area Captured. Respawning..." )
@@ -99,9 +103,8 @@ function startup()
 	flags_set_team( attackers )
 	
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 end
 
 -- overwriting these functions so that there aren't repeat messages
@@ -143,7 +146,7 @@ end
 
 function base_id_cap:oncapture(player, item)
 	SmartSound(player, "yourteam.flagcap", "yourteam.flagcap", "otherteam.flagcap")
---SmartSound(player, "vox.yourcap", "vox.yourcap", "vox.enemycap")
+	--SmartSound(player, "vox.yourcap", "vox.yourcap", "vox.enemycap")
 	SmartSpeak(player, "CTF_YOUCAP", "CTF_TEAMCAP", "CTF_THEYCAP")
  	SmartMessage(player, "#FF_YOUCAP", "#FF_TEAMCAP", "#FF_OTHERTEAMCAP", Color.kGreen, Color.kGreen, Color.kRed)
 
@@ -189,10 +192,8 @@ function base_id_cap:oncapture(player, item)
 		
 		-- clear objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = nil
-		if DEFENDERS_OBJECTIVE_ONFLAG or DEFENDERS_OBJECTIVE_ONCARRIER then DEFENDERS_OBJECTIVE_ENTITY = nil
-		else DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" ) end
+		UpdateDefendersObjective()
 		UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 		
 		setup_tobase_timer()
 		update_hud()
@@ -227,9 +228,8 @@ function switch_teams()
 	
 	-- change objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
-	DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 	
 	-- reset the timer on points
 	AddScheduleRepeating("addpoints", PERIOD_TIME, addpoints)
@@ -421,5 +421,3 @@ end
 -- Don't want any body touching/triggering it except the detpack
 function trigger_detpackable_door:allowed( trigger_entity ) return EVENT_DISALLOWED 
 end
-
-

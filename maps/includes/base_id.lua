@@ -20,8 +20,11 @@ if onroundreset == nil then onroundreset = function() end end
 if FLAG_RETURN_TIME == nil then FLAG_RETURN_TIME = 60; end
 if ATTACKERS_OBJECTIVE_ENTITY == nil then ATTACKERS_OBJECTIVE_ENTITY = nil end
 if DEFENDERS_OBJECTIVE_ENTITY == nil then DEFENDERS_OBJECTIVE_ENTITY = nil end
-if DEFENDERS_OBJECTIVE_ONFLAG == nil then DEFENDERS_OBJECTIVE_ONFLAG = true end
-if DEFENDERS_OBJECTIVE_ONCARRIER == nil then DEFENDERS_OBJECTIVE_ONCARRIER = true end
+-- _ONCAP set to true; Defenders should always point to cap
+if DEFENDERS_OBJECTIVE_ONCAP == nil then DEFENDERS_OBJECTIVE_ONCAP = true end
+-- _OBJECTIVE_ONCARRIER and _ONFLAG set to false to keep objective on cap
+if DEFENDERS_OBJECTIVE_ONFLAG == nil then DEFENDERS_OBJECTIVE_ONFLAG = false end
+if DEFENDERS_OBJECTIVE_ONCARRIER == nil then DEFENDERS_OBJECTIVE_ONCARRIER = false end
 if TEAM_SWITCH_DELAY == nil then TEAM_SWITCH_DELAY = 2 end
 if RESPAWN_AFTER_CAP == nil then RESPAWN_AFTER_CAP = false end
 if RESPAWN_DELAY == nil then RESPAWN_DELAY = 2 end
@@ -139,6 +142,7 @@ function baseflag:spawn()
 
 	self.status = 0
 	
+	UpdateDefendersObjective()
 	update_hud()
 end
 
@@ -155,9 +159,8 @@ function baseflag:ownercloak( owner_entity )
 	
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) 
-	if DEFENDERS_OBJECTIVE_ONFLAG then DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) end
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 	
 	setup_return_timer()
 	update_hud()
@@ -182,9 +185,8 @@ function baseflag:dropitemcmd( owner_entity )
 
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	if DEFENDERS_OBJECTIVE_ONFLAG then DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) end
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 	
 	setup_return_timer()
 	update_hud()
@@ -203,9 +205,8 @@ function baseflag:onownerforcerespawn( owner_entity )
 	
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	if DEFENDERS_OBJECTIVE_ONFLAG then DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" ) end
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 
 	update_hud()
 end
@@ -225,9 +226,8 @@ function baseflag:onreturn( )
 
 	-- objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
-	if DEFENDERS_OBJECTIVE_ONFLAG then DEFENDERS_OBJECTIVE_ENTITY = flag end
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 	
 	destroy_return_timer()
 	update_hud()
@@ -290,9 +290,8 @@ function startup()
 	flags_set_team( attackers )
 	
 	ATTACKERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_flag" )
-	DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 end
 
 -- Give everyone a full resupply, but strip secondary grenades
@@ -434,10 +433,8 @@ function base_id_flag:touch( touch_entity )
 
 			-- change objective icons
 			ATTACKERS_OBJECTIVE_ENTITY = player
-			if DEFENDERS_OBJECTIVE_ONFLAG then DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..self.phase.."_cap" ) end
-			if DEFENDERS_OBJECTIVE_ONCARRIER then DEFENDERS_OBJECTIVE_ENTITY = player end
+			UpdateDefendersObjective()
 			UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-			UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 			UpdateObjectiveIcon( player, GetEntityByName( "cp"..self.phase.."_cap" ) )
 			
 			carried_by = player:GetName()
@@ -465,9 +462,8 @@ function base_id_flag:onownerdie( owner_entity )
 	
 	-- change objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
-	if DEFENDERS_OBJECTIVE_ONFLAG then DEFENDERS_OBJECTIVE_ENTITY = flag end
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 	UpdateObjectiveIcon( player, nil )
 	
 	self.status = 2
@@ -543,10 +539,8 @@ function base_id_cap:oncapture(player, item)
 		
 		-- clear objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = nil
-		if DEFENDERS_OBJECTIVE_ONFLAG or DEFENDERS_OBJECTIVE_ONCARRIER then DEFENDERS_OBJECTIVE_ENTITY = nil
-		else DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" ) end
+		UpdateDefendersObjective()
 		UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 		
 		setup_tobase_timer()
 		update_hud()
@@ -589,9 +583,8 @@ function round_end()
 		
 		-- change objective icon
 		ATTACKERS_OBJECTIVE_ENTITY = flag
-		DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName( "cp"..phase.."_cap" )
+		UpdateDefendersObjective()
 		UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-		UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 		
 		-- reset the timer on points
 		AddScheduleRepeating("addpoints", PERIOD_TIME, addpoints)
@@ -632,9 +625,8 @@ function flag_start(flagname)
 	
 	-- change objective icon
 	ATTACKERS_OBJECTIVE_ENTITY = flag
-	if DEFENDERS_OBJECTIVE_ONFLAG then DEFENDERS_OBJECTIVE_ENTITY = flag end
+	UpdateDefendersObjective()
 	UpdateTeamObjectiveIcon( GetTeam(attackers), ATTACKERS_OBJECTIVE_ENTITY )
-	UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 	update_hud()
 end
 function flag_30secwarn() BroadCastMessage("#AD_30SecReturn") end
@@ -665,6 +657,20 @@ end
 
 function destroy_tobase_timer()
 	RemoveSchedule( "timer_tobase_schedule" )
+end
+
+function UpdateDefendersObjective()
+	-- Check to see what Defenders should be focused on and update 
+    local flag = GetInfoScriptByName("cp"..phase.."_flag")
+    local carried = flag:IsCarried()
+    if (not carried and DEFENDERS_OBJECTIVE_ONFLAG) or (carried and DEFENDERS_OBJECTIVE_ONCARRIER) then
+        DEFENDERS_OBJECTIVE_ENTITY = flag
+    elseif DEFENDERS_OBJECTIVE_ONCAP then
+        DEFENDERS_OBJECTIVE_ENTITY = GetEntityByName("cp"..phase.."_cap")
+    else
+        DEFENDERS_OBJECTIVE_ENTITY = nil
+    end
+    UpdateTeamObjectiveIcon( GetTeam(defenders), DEFENDERS_OBJECTIVE_ENTITY )
 end
 
 ------------------------------------------------
