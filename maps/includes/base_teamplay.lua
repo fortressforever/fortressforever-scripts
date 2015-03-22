@@ -34,6 +34,23 @@ team_hudicons[Team.kRed] 	= "hud_flag_red_new.vtf"
 team_hudicons[Team.kGreen] 	= "hud_flag_green_new.vtf"
 team_hudicons[Team.kYellow] = "hud_flag_yellow_new.vtf"
 
+-- These letters must all be different!
+hudiconlookup = {}
+hudiconlookup["_status"] = "s"
+hudiconlookup["location"] = "l"
+hudiconlookup["carrier"] = "c"
+hudiconlookup["timer"] = "t"
+
+hudiconlookup["blue_flagcarrier"] = "bc"
+hudiconlookup["red_flagcarrier"] = "rc"
+hudiconlookup["yellow_flagcarrier"] = "yc"
+hudiconlookup["green_flagcarrier"] = "gc"
+
+hudiconlookup["blue_flaglocation"] = "bl"
+hudiconlookup["red_flaglocation"] = "rl"
+hudiconlookup["yellow_flaglocation"] = "yl"
+hudiconlookup["green_flaglocation"] = "gl"
+
 -----------------------------------------------------------------------------
 -- Player spawn: give full health, armor, and ammo
 -----------------------------------------------------------------------------
@@ -704,6 +721,10 @@ function baseflag:onownerforcerespawn( owner_entity )
 	UpdateObjectiveIcon( player, nil )
 end
 
+function getshorthudname(longname)
+    
+end
+
 function baseflag:onreturn( )
 	-- let the teams know that the flag was returned
 	local team = GetTeam( self.team )
@@ -746,20 +767,20 @@ end
 
 --All your flag HUD status needs in a convenient package (sort of)
 function baseflag:refreshStatusIcons(flagname)
-	RemoveHudItemFromAll( flagname .. "_status" )
+	RemoveHudItemFromAll( flagname .. hudiconlookup["_status"] )
 	RemoveHudItemFromAll( flagname .. "location" )
 	RemoveHudItemFromAll( flagname .. "carrier" )
 	RemoveHudItemFromAll( flagname .. "timer" )
 
 	if self.status == 1 then
 		AddHudTextToAll( flagname .. "carrier", self.carriedby, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
-		AddHudIconToAll( self.hudstatusiconcarried, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
+		AddHudIconToAll( self.hudstatusiconcarried, ( flagname .. hudiconlookup["_status"]  ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
 	elseif self.status == 2 then
 		AddHudTextToAll( flagname .. "location", self.droppedlocation, self.hudstatusiconx + 24, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
 		AddHudTimerToAll( flagname .. "timer", FLAG_RETURN_TIME+1, -1, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
-		AddHudIconToAll( self.hudstatusicondropped, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
+		AddHudIconToAll( self.hudstatusicondropped, ( flagname .. hudiconlookup["_status"]  ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
 	else
-		AddHudIconToAll( self.hudstatusiconhome, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )	
+		AddHudIconToAll( self.hudstatusiconhome, ( flagname .. hudiconlookup["_status"]  ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )	
 	end
 end
 
@@ -773,72 +794,72 @@ function flaginfo_base( player_entity )
 	if flag then
 		local flagname = flag:GetName()
 	
-		RemoveHudItem( player, flagname .. "_status" )
-		RemoveHudItem( player, "blue_flagcarrier" )
-		RemoveHudItem( player, "blue_flaglocation" )
+		RemoveHudItem( player, flagname .. hudiconlookup["_status"]  )
+		RemoveHudItem( player, hudiconlookup["blue_flagcarrier"] )
+		RemoveHudItem( player, hudiconlookup["blue_flaglocation"] )
 
 		if flag:IsCarried() then
-			AddHudText( player, "blue_flagcarrier", blue_flag.carriedby, blue_flag.hudstatusiconx, (blue_flag.hudstatusicony + blue_flag.hudstatusiconh), blue_flag.hudstatusiconalign )
-			AddHudIcon( player, blue_flag.hudstatusiconcarried, ( flagname .. "_status" ), blue_flag.hudstatusiconx, blue_flag.hudstatusicony, blue_flag.hudstatusiconw, blue_flag.hudstatusiconh, blue_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["blue_flagcarrier"], blue_flag.carriedby, blue_flag.hudstatusiconx, (blue_flag.hudstatusicony + blue_flag.hudstatusiconh), blue_flag.hudstatusiconalign )
+			AddHudIcon( player, blue_flag.hudstatusiconcarried, ( flagname .. hudiconlookup["_status"]  ), blue_flag.hudstatusiconx, blue_flag.hudstatusicony, blue_flag.hudstatusiconw, blue_flag.hudstatusiconh, blue_flag.hudstatusiconalign )
 		elseif flag:IsDropped() then
-			AddHudText( player, "blue_flaglocation", blue_flag.droppedlocation, blue_flag.hudstatusiconx + 24, (blue_flag.hudstatusicony + blue_flag.hudstatusiconh), blue_flag.hudstatusiconalign )
-			AddHudIcon( player, blue_flag.hudstatusicondropped, ( flagname .. "_status" ), blue_flag.hudstatusiconx, blue_flag.hudstatusicony, blue_flag.hudstatusiconw, blue_flag.hudstatusiconh, blue_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["blue_flaglocation"], blue_flag.droppedlocation, blue_flag.hudstatusiconx + 24, (blue_flag.hudstatusicony + blue_flag.hudstatusiconh), blue_flag.hudstatusiconalign )
+			AddHudIcon( player, blue_flag.hudstatusicondropped, ( flagname .. hudiconlookup["_status"]  ), blue_flag.hudstatusiconx, blue_flag.hudstatusicony, blue_flag.hudstatusiconw, blue_flag.hudstatusiconh, blue_flag.hudstatusiconalign )
 		else
-			AddHudIcon( player, blue_flag.hudstatusiconhome, ( flagname .. "_status" ), blue_flag.hudstatusiconx, blue_flag.hudstatusicony, blue_flag.hudstatusiconw, blue_flag.hudstatusiconh, blue_flag.hudstatusiconalign )	
+			AddHudIcon( player, blue_flag.hudstatusiconhome, ( flagname .. hudiconlookup["_status"]  ), blue_flag.hudstatusiconx, blue_flag.hudstatusicony, blue_flag.hudstatusiconw, blue_flag.hudstatusiconh, blue_flag.hudstatusiconalign )	
 		end
 	end
 	local flag = GetInfoScriptByName("red_flag")
 	if flag then
 		local flagname = flag:GetName()
 	
-		RemoveHudItem( player, flagname .. "_status" )
-		RemoveHudItem( player, "red_flagcarrier" )
-		RemoveHudItem( player, "red_flaglocation" )
+		RemoveHudItem( player, flagname .. hudiconlookup["_status"]  )
+		RemoveHudItem( player, hudiconlookup["red_flagcarrier"] )
+		RemoveHudItem( player, hudiconlookup["red_flaglocation"] )
 
 		if flag:IsCarried() then
-			AddHudText( player, "red_flagcarrier", red_flag.carriedby, red_flag.hudstatusiconx, (red_flag.hudstatusicony + red_flag.hudstatusiconh), red_flag.hudstatusiconalign )
-			AddHudIcon( player, red_flag.hudstatusiconcarried, ( flagname .. "_status" ), red_flag.hudstatusiconx, red_flag.hudstatusicony, red_flag.hudstatusiconw, red_flag.hudstatusiconh, red_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["red_flagcarrier"], red_flag.carriedby, red_flag.hudstatusiconx, (red_flag.hudstatusicony + red_flag.hudstatusiconh), red_flag.hudstatusiconalign )
+			AddHudIcon( player, red_flag.hudstatusiconcarried, ( flagname .. hudiconlookup["_status"]  ), red_flag.hudstatusiconx, red_flag.hudstatusicony, red_flag.hudstatusiconw, red_flag.hudstatusiconh, red_flag.hudstatusiconalign )
 		elseif flag:IsDropped() then
-			AddHudText( player, "red_flaglocation", red_flag.droppedlocation, red_flag.hudstatusiconx + 24, (red_flag.hudstatusicony + red_flag.hudstatusiconh), red_flag.hudstatusiconalign )
-			AddHudIcon( player, red_flag.hudstatusicondropped, ( flagname .. "_status" ), red_flag.hudstatusiconx, red_flag.hudstatusicony, red_flag.hudstatusiconw, red_flag.hudstatusiconh, red_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["red_flaglocation"], red_flag.droppedlocation, red_flag.hudstatusiconx + 24, (red_flag.hudstatusicony + red_flag.hudstatusiconh), red_flag.hudstatusiconalign )
+			AddHudIcon( player, red_flag.hudstatusicondropped, ( flagname .. hudiconlookup["_status"]  ), red_flag.hudstatusiconx, red_flag.hudstatusicony, red_flag.hudstatusiconw, red_flag.hudstatusiconh, red_flag.hudstatusiconalign )
 		else
-			AddHudIcon( player, red_flag.hudstatusiconhome, ( flagname .. "_status" ), red_flag.hudstatusiconx, red_flag.hudstatusicony, red_flag.hudstatusiconw, red_flag.hudstatusiconh, red_flag.hudstatusiconalign )	
+			AddHudIcon( player, red_flag.hudstatusiconhome, ( flagname .. hudiconlookup["_status"]  ), red_flag.hudstatusiconx, red_flag.hudstatusicony, red_flag.hudstatusiconw, red_flag.hudstatusiconh, red_flag.hudstatusiconalign )	
 		end
 	end
 	local flag = GetInfoScriptByName("yellow_flag")
 	if flag then
 		local flagname = flag:GetName()
 	
-		RemoveHudItem( player, flagname .. "_status" )
-		RemoveHudItem( player, "yellow_flagcarrier" )
-		RemoveHudItem( player, "yellow_flaglocation" )
+		RemoveHudItem( player, flagname .. hudiconlookup["_status"]  )
+		RemoveHudItem( player, hudiconlookup["yellow_flagcarrier"] )
+		RemoveHudItem( player, hudiconlookup["yellow_flaglocation"] )
 
 		if flag:IsCarried() then
-			AddHudText( player, "yellow_flagcarrier", yellow_flag.carriedby, yellow_flag.hudstatusiconx, (yellow_flag.hudstatusicony + yellow_flag.hudstatusiconh), yellow_flag.hudstatusiconalign )
-			AddHudIcon( player, yellow_flag.hudstatusiconcarried, ( flagname .. "_status" ), yellow_flag.hudstatusiconx, yellow_flag.hudstatusicony, yellow_flag.hudstatusiconw, yellow_flag.hudstatusiconh, yellow_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["yellow_flagcarrier"], yellow_flag.carriedby, yellow_flag.hudstatusiconx, (yellow_flag.hudstatusicony + yellow_flag.hudstatusiconh), yellow_flag.hudstatusiconalign )
+			AddHudIcon( player, yellow_flag.hudstatusiconcarried, ( flagname .. hudiconlookup["_status"]  ), yellow_flag.hudstatusiconx, yellow_flag.hudstatusicony, yellow_flag.hudstatusiconw, yellow_flag.hudstatusiconh, yellow_flag.hudstatusiconalign )
 		elseif flag:IsDropped() then
-			AddHudText( player, "yellow_flaglocation", yellow_flag.droppedlocation, yellow_flag.hudstatusiconx + 24, (yellow_flag.hudstatusicony + yellow_flag.hudstatusiconh), yellow_flag.hudstatusiconalign )
-			AddHudIcon( player, yellow_flag.hudstatusicondropped, ( flagname .. "_status" ), yellow_flag.hudstatusiconx, yellow_flag.hudstatusicony, yellow_flag.hudstatusiconw, yellow_flag.hudstatusiconh, yellow_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["yellow_flaglocation"], yellow_flag.droppedlocation, yellow_flag.hudstatusiconx + 24, (yellow_flag.hudstatusicony + yellow_flag.hudstatusiconh), yellow_flag.hudstatusiconalign )
+			AddHudIcon( player, yellow_flag.hudstatusicondropped, ( flagname .. hudiconlookup["_status"]  ), yellow_flag.hudstatusiconx, yellow_flag.hudstatusicony, yellow_flag.hudstatusiconw, yellow_flag.hudstatusiconh, yellow_flag.hudstatusiconalign )
 		else
-			AddHudIcon( player, yellow_flag.hudstatusiconhome, ( flagname .. "_status" ), yellow_flag.hudstatusiconx, yellow_flag.hudstatusicony, yellow_flag.hudstatusiconw, yellow_flag.hudstatusiconh, yellow_flag.hudstatusiconalign )	
+			AddHudIcon( player, yellow_flag.hudstatusiconhome, ( flagname .. hudiconlookup["_status"]  ), yellow_flag.hudstatusiconx, yellow_flag.hudstatusicony, yellow_flag.hudstatusiconw, yellow_flag.hudstatusiconh, yellow_flag.hudstatusiconalign )	
 		end
 	end
 	local flag = GetInfoScriptByName("green_flag")
 	if flag then
 		local flagname = flag:GetName()
 	
-		RemoveHudItem( player, flagname .. "_status" )
-		RemoveHudItem( player, "green_flagcarrier" )
-		RemoveHudItem( player, "green_flaglocation" )
+		RemoveHudItem( player, flagname .. hudiconlookup["_status"]  )
+		RemoveHudItem( player, hudiconlookup["green_flagcarrier"] )
+		RemoveHudItem( player, hudiconlookup["green_flaglocation"] )
 
 		if flag:IsCarried() then
-			AddHudText( player, "green_flagcarrier", green_flag.carriedby, green_flag.hudstatusiconx, (green_flag.hudstatusicony + green_flag.hudstatusiconh), green_flag.hudstatusiconalign )
-			AddHudIcon( player, green_flag.hudstatusiconcarried, ( flagname .. "_status" ), green_flag.hudstatusiconx, green_flag.hudstatusicony, green_flag.hudstatusiconw, green_flag.hudstatusiconh, green_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["green_flagcarrier"], green_flag.carriedby, green_flag.hudstatusiconx, (green_flag.hudstatusicony + green_flag.hudstatusiconh), green_flag.hudstatusiconalign )
+			AddHudIcon( player, green_flag.hudstatusiconcarried, ( flagname .. hudiconlookup["_status"]  ), green_flag.hudstatusiconx, green_flag.hudstatusicony, green_flag.hudstatusiconw, green_flag.hudstatusiconh, green_flag.hudstatusiconalign )
 		elseif flag:IsDropped() then
-			AddHudText( player, "green_flaglocation", green_flag.droppedlocation, green_flag.hudstatusiconx + 24, (green_flag.hudstatusicony + green_flag.hudstatusiconh), green_flag.hudstatusiconalign )
-			AddHudIcon( player, green_flag.hudstatusicondropped, ( flagname .. "_status" ), green_flag.hudstatusiconx, green_flag.hudstatusicony, green_flag.hudstatusiconw, green_flag.hudstatusiconh, green_flag.hudstatusiconalign )
+			AddHudText( player, hudiconlookup["green_flaglocation"], green_flag.droppedlocation, green_flag.hudstatusiconx + 24, (green_flag.hudstatusicony + green_flag.hudstatusiconh), green_flag.hudstatusiconalign )
+			AddHudIcon( player, green_flag.hudstatusicondropped, ( flagname .. hudiconlookup["_status"]  ), green_flag.hudstatusiconx, green_flag.hudstatusicony, green_flag.hudstatusiconw, green_flag.hudstatusiconh, green_flag.hudstatusiconalign )
 		else
-			AddHudIcon( player, green_flag.hudstatusiconhome, ( flagname .. "_status" ), green_flag.hudstatusiconx, green_flag.hudstatusicony, green_flag.hudstatusiconw, green_flag.hudstatusiconh, green_flag.hudstatusiconalign )	
+			AddHudIcon( player, green_flag.hudstatusiconhome, ( flagname .. hudiconlookup["_status"]  ), green_flag.hudstatusiconx, green_flag.hudstatusicony, green_flag.hudstatusiconw, green_flag.hudstatusiconh, green_flag.hudstatusiconalign )	
 		end
 	end
 end
