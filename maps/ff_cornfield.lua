@@ -1,4 +1,4 @@
-IncludeScript("base_id_new");
+IncludeScript("base_id");
 IncludeScript("base_respawnturret");
 IncludeScript("base_location");
 
