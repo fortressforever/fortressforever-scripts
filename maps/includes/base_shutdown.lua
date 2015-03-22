@@ -56,9 +56,9 @@ function security_off( team )
 	
 	-- add a timer for the security on HUD
 	if team == "red" then	
-		AddHudTimerToAll( "red_sec_timer", SECURITY_LENGTH + 1, -1, button_red.iconx, button_red.icony + 15, button_red.iconalign )
+		AddHudTimerToAll( "red_sec_timer", SECURITY_LENGTH, -1, button_red.iconx, button_red.icony + 15, button_red.iconalign )
 	else 
-		AddHudTimerToAll( "blue_sec_timer", SECURITY_LENGTH + 1, -1, button_blue.iconx, button_blue.icony + 15, button_blue.iconalign )
+		AddHudTimerToAll( "blue_sec_timer", SECURITY_LENGTH, -1, button_blue.iconx, button_blue.icony + 15, button_blue.iconalign )
 	end
 end
 
