@@ -252,7 +252,7 @@ Scheme
 			"1"
 			{
 				"name"		"FortressForever - HUD Font"
-				"tall"		"14"
+				"tall"		"16"
 				"antialias"	"1"
 			}
 		}
@@ -324,7 +324,7 @@ Scheme
 			{
 				
 				"name"		"FortressForever - HUD Font"
-				"tall"		"16"
+				"tall"		"18"
 				"weight"	"500"
 				"antialias"	"1"
 			}
@@ -335,7 +335,7 @@ Scheme
 			"1"
 			{
 				"name"		"FortressForever - HUD Font"
-				"tall"		"16"
+				"tall"		"18"
 				"weight"	"500"
 				"antialias" 	"1"
 				
@@ -344,7 +344,7 @@ Scheme
 			"2"
 			{
 				"name"		"FortressForever - HUD Font"
-				"tall"		"18"
+				"tall"		"20"
 				"weight"	"500"
 				"antialias" 	"1"
 				"yres"		"600 767"
@@ -352,7 +352,7 @@ Scheme
 			"3"
 			{
 				"name"		"FortressForever - HUD Font"
-				"tall"		"22"
+				"tall"		"24"
 				"weight"	"500"
 				"antialias" 	"1"
 				"yres"		"768 1023"
@@ -360,7 +360,7 @@ Scheme
 			"4"
 			{
 				"name"		"FortressForever - HUD Font"
-				"tall"		"24"
+				"tall"		"26"
 				"weight"	"600"
 				"antialias" 	"1"
 				"yres"		"1024 1199"
