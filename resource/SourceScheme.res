@@ -254,7 +254,6 @@ Scheme
 				"name"		"FortressForever - HUD Font"
 				"tall"		"14"
 				"antialias"	"1"
-				"custom"	"1"
 			}
 		}
 		"DefaultBold"	//doesn't appear to be used
@@ -263,7 +262,6 @@ Scheme
 			{
 				
 				"name"		"Tahoma"
-				"custom" 	"1"
 				"tall"		"16"
 				"weight"	"500"
 			}
@@ -284,7 +282,6 @@ Scheme
 			{
 				
 				"name"		"Verdana"
-				"custom" 	"1"
 				"tall"		"12"
 				"weight"	"0"
 			}
@@ -295,7 +292,6 @@ Scheme
 			{
 				
 				"name"		"Verdana"
-				"custom" 	"1"
 				"tall"		"13"
 				"weight"	"0"
 				"dropshadow" "1"
@@ -307,7 +303,6 @@ Scheme
 			{
 				
 				"name"		"Tahoma"
-				"custom" 	"1"
 				"tall"		"14"
 				"weight"	"0"
 			}
@@ -319,7 +314,6 @@ Scheme
 			{
 				
 				"name"		"Verdana"
-				"custom" 	"1"
 				"tall"		"18"
 				"weight"	"0"
 			}
@@ -330,7 +324,6 @@ Scheme
 			{
 				
 				"name"		"FortressForever - HUD Font"
-				"custom" 	"1"
 				"tall"		"16"
 				"weight"	"500"
 				"antialias"	"1"
@@ -342,7 +335,6 @@ Scheme
 			"1"
 			{
 				"name"		"FortressForever - HUD Font"
-				"custom" 	"1"
 				"tall"		"16"
 				"weight"	"500"
 				"antialias" 	"1"
@@ -352,7 +344,6 @@ Scheme
 			"2"
 			{
 				"name"		"FortressForever - HUD Font"
-				"custom" 	"1"
 				"tall"		"18"
 				"weight"	"500"
 				"antialias" 	"1"
@@ -361,7 +352,6 @@ Scheme
 			"3"
 			{
 				"name"		"FortressForever - HUD Font"
-				"custom" 	"1"
 				"tall"		"22"
 				"weight"	"500"
 				"antialias" 	"1"
@@ -370,7 +360,6 @@ Scheme
 			"4"
 			{
 				"name"		"FortressForever - HUD Font"
-				"custom" 	"1"
 				"tall"		"24"
 				"weight"	"600"
 				"antialias" 	"1"
@@ -379,7 +368,6 @@ Scheme
 			"5"
 			{
 				"name"		"FortressForever - HUD Font"
-				"custom" 	"1"
 				"tall"		"32"
 				"weight"	"600"
 				"antialias" 	"1"
@@ -581,7 +569,6 @@ Scheme
 				"tall"		"72"
 				"weight"	"400"
 				"antialias"	"1"
-				"custom"	"1"
 			}
 		}
 
@@ -593,7 +580,6 @@ Scheme
 				"tall"		"120"
 				"weight"	"400"
 				"antialias"	"1"
-				"custom"	"1"
 			}
 		}
 	}
