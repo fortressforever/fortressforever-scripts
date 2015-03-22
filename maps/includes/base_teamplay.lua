@@ -726,10 +726,6 @@ function baseflag:onownerforcerespawn( owner_entity )
 	UpdateObjectiveIcon( player, nil )
 end
 
-function getshorthudname(longname)
-    
-end
-
 function baseflag:onreturn( )
 	-- let the teams know that the flag was returned
 	local team = GetTeam( self.team )
