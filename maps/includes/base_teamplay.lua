@@ -785,26 +785,6 @@ function baseflag:refreshStatusIcons(flagname)
 	end
 end
 
---All your flag HUD status needs in a convenient package (sort of)
-function baseflag:refreshStatusIconsForPlayer(player_entity)
-	local flagname = self.name
-	RemoveHudItem( player, hudiconlookup[ flagname .. "_status"] )
-	RemoveHudItem( player, hudiconlookup[ flagname .. "location"] )
-	RemoveHudItem( player, hudiconlookup[ flagname .. "carrier"] )
-	RemoveHudItem( player, hudiconlookup[ flagname .. "timer"] )
-
-	if self.status == 1 then
-		AddHudTextToAll( hudiconlookup[flagname .. "carrier"], self.carriedby, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
-		AddHudIconToAll( self.hudstatusiconcarried, ( hudiconlookup[flagname .. "_status"]  ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
-	elseif self.status == 2 then
-		AddHudTextToAll( hudiconlookup[flagname .. "location"], self.droppedlocation, self.hudstatusiconx + 24, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
-		AddHudTimerToAll( hudiconlookup[flagname .. "timer"], FLAG_RETURN_TIME+1, -1, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
-		AddHudIconToAll( self.hudstatusicondropped, ( hudiconlookup[flagname .. "_status"]  ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
-	else
-		AddHudIconToAll( self.hudstatusiconhome, ( hudiconlookup[flagname .. "_status"]  ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )	
-	end
-end
-
 -----------------------------------------------------------------------------
 --flaginfo, basic version. If you override flaginfo in a map's lua, call this to get default functionality.
 -----------------------------------------------------------------------------
@@ -813,7 +793,6 @@ function flaginfo_base( player_entity )
 
 	local flag = GetInfoScriptByName("blue_flag")
 	if flag then
-		flag.refreshStatusIcons(player)
 		local flagname = hudiconlookup[flag:GetName()]
 	
 		RemoveHudItem( player, hudiconlookup[flagname .. "_status"]  )
