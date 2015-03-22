@@ -34,10 +34,9 @@ team_hudicons[Team.kRed] 	= "hud_flag_red_new.vtf"
 team_hudicons[Team.kGreen] 	= "hud_flag_green_new.vtf"
 team_hudicons[Team.kYellow] = "hud_flag_yellow_new.vtf"
 
--- These letters must all be different!
+-- These strings must all be different!
 hudiconlookup = {}
-
-hudiconlookup["blue_flag"] = "b" -- these must match the flag.name property
+hudiconlookup["blue_flag"] = "b" -- these must match the flag:GetName return value
 hudiconlookup["red_flag"] = "r"
 hudiconlookup["green_flag"] = "g"
 hudiconlookup["yellow_flag"] = "y"
