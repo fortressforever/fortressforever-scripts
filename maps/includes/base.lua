@@ -6,8 +6,8 @@
 -- This file is loaded automatically whenever a map is loaded.
 -- Do not change this file.
 -----------------------------------------------------------------------------
-local _G = getfenv(0)
 
+Class = require "util.class"
 
 -----------------------------------------------------------------------------
 -- defines
