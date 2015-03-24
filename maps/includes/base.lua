@@ -49,6 +49,20 @@ end
 
 
 -----------------------------------------------------------------------------
+-- make luabind's class_info function safer
+-- (don't crash if class_info() is called on non-luabind objects)
+-----------------------------------------------------------------------------
+local class_info_base = class_info
+class_info = function(obj)
+	local obj_type = type(obj)
+	if obj_type == "userdata" and getmetatable(obj).__luabind_class then
+		return class_info_base(obj)
+	end
+	return {}
+end
+
+
+-----------------------------------------------------------------------------
 -- reset everything
 -----------------------------------------------------------------------------
 function RespawnAllPlayers()
