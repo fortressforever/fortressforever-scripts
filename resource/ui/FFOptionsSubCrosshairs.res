@@ -429,7 +429,7 @@
 		"xpos"		"275"
 		"ypos"		"49"
 		"wide"		"185"
-		"tall"		"24"
+		"tall"		"32"
 		"autoResize"		"0"
 		"pinCorner"		"0"
 		"visible"		"1"
@@ -439,7 +439,7 @@
 		"textAlignment"		"west"
 		"dulltext"		"0"
 		"brighttext"		"0"
-		"wrap"		"0"
+		"wrap"		"1"
 		"Default"		"0"
 	}
 	"innerDisplay"
