@@ -500,10 +500,10 @@
 		"border"		"DepressedBorder"
 		"scaleImage"		"1"
 	}
-	"weapon"
+	"Crosshair"
 	{
 		"ControlName"		"ComboBox"
-		"fieldName"		"Weapon"
+		"fieldName"		"Crosshair"
 		"xpos"		"292"
 		"ypos"		"23"
 		"wide"		"150"
