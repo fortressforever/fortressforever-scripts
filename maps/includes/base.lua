@@ -7,6 +7,7 @@
 -- Do not change this file.
 -----------------------------------------------------------------------------
 
+require "util.utils"
 Class = require "util.class"
 Collection = require "util.collection"
 
