@@ -14,7 +14,8 @@ function startup()
 	SetPlayerLimit( Team.kYellow, -1 )
 	SetPlayerLimit( Team.kGreen, -1 )
 
-	SetTeamName( Team.kRed, "Destroyers" )
+	SetTeamName( Team.kBlue, "Blue Orcas" )
+	SetTeamName( Team.kRed, "Red Gazelles" )
 end
 
 function precache()

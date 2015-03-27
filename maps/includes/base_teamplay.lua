@@ -537,6 +537,7 @@ function baseflag:spawn()
 	LogLuaEvent(0, 0, "flag_spawn","flag_name",flag:GetName())
 	self.status = 0
 	self:refreshStatusIcons(flag:GetName())
+	flag:StartTrail(self.team)
 end
 
 function baseflag:addnotouch(player_id, duration)
