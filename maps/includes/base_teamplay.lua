@@ -757,7 +757,7 @@ function baseflag:refreshStatusIcons(flagname)
 		AddHudIconToAll( self.hudstatusiconcarried, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
 	elseif self.status == 2 then
 		AddHudTextToAll( flagname .. "location", self.droppedlocation, self.hudstatusiconx + 24, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
-		AddHudTimerToAll( flagname .. "timer", FLAG_RETURN_TIME+1, -1, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
+		AddHudTimerToAll( flagname .. "timer", FLAG_RETURN_TIME, -1, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
 		AddHudIconToAll( self.hudstatusicondropped, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
 	else
 		AddHudIconToAll( self.hudstatusiconhome, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )	
