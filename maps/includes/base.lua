@@ -7,7 +7,9 @@
 -- Do not change this file.
 -----------------------------------------------------------------------------
 
+require "util.utils"
 Class = require "util.class"
+Collection = require "util.collection"
 
 -----------------------------------------------------------------------------
 -- defines
@@ -45,6 +47,47 @@ function baseclass:new (o)
 	setmetatable(o, self)
 	self.__index = self
 	return o
+end
+
+
+-----------------------------------------------------------------------------
+-- set up pairs and ipairs for iterating the global entity list
+--
+-- Example usage:
+--
+--   for ent_id, ent in pairs(GlobalEntityList) do
+--     print(ent_id, ent)
+--   end
+--
+-- Note: The order of iteration is always arbitrary
+-----------------------------------------------------------------------------
+local GlobalEntityListIterator = function()
+	local entity = GlobalEntityList:FirstEntity()
+	return function()
+		local cur_ent = entity
+		entity = GlobalEntityList:NextEntity(cur_ent)
+		if cur_ent then
+			return cur_ent:GetId(), cur_ent
+		else
+			return nil
+		end
+	end
+end
+
+local ipairs_base = ipairs
+ipairs = function(t)
+	if t == GlobalEntityList then
+		return GlobalEntityListIterator()
+	end
+	return ipairs_base(t)
+end
+
+local pairs_base = pairs
+pairs = function(t)
+	if t == GlobalEntityList then
+		return GlobalEntityListIterator()
+	end
+	return pairs_base(t)
 end
 
 
