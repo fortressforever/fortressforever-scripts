@@ -245,6 +245,8 @@ blue_security_trigger = base_security_trigger:new( { team = Team.kBlue, button =
 -- Hurts
 -----------------------------------------------------------------------------
 
+-- backwards compatibility
+hurt = team_only_trigger:new({})
 -- red lasers hurt blue and vice-versa
 red_security_hurt = not_red_trigger:new({})
 blue_security_hurt = not_blue_trigger:new({})
