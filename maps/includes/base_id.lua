@@ -785,7 +785,7 @@ function flaginfo( player_entity )
 			else
 				AddHudTextToAll("flag_return_text", "#AD_FlagReturnBase", text_hudstatusx, text_hudstatusy, text_hudstatusalign, 0)
 			end
-			AddHudTimer(player, "flag_return_timer", current_timer + 1, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
+			AddHudTimer(player, "flag_return_timer", current_timer, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
 			AddHudIcon(player, hudstatusicondropped, ( "cp_flag_d" ), flag_hudstatusiconx, flag_hudstatusicony, flag_hudstatusiconw, flag_hudstatusiconh, flag_hudstatusiconalign )
 		elseif _G[flagname].status == 0 then
 			AddHudText(player, "flag_athome", "#AD_FlagIsAt", text_hudstatusx, text_hudstatusy, text_hudstatusalign, 0)
@@ -802,7 +802,7 @@ function flaginfo( player_entity )
 		else
 			AddHudText(player, "flag_tobase_text", "#AD_FlagReturnBase", text_hudstatusx, text_hudstatusy, text_hudstatusalign, 0)
 		end
-		AddHudTimer(player, "flag_tobase_timer", current_timer + 1, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
+		AddHudTimer(player, "flag_tobase_timer", current_timer, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
 		AddHudIcon(player, hudstatusicontobase, ( "cp_flag_h" ), flag_hudstatusiconx, flag_hudstatusicony, flag_hudstatusiconw, flag_hudstatusiconh, flag_hudstatusiconalign )
 	end
 	
@@ -891,7 +891,7 @@ function update_hud()
 			else
 				AddHudTextToAll("flag_return_text", "#AD_FlagReturnBase", text_hudstatusx, text_hudstatusy, text_hudstatusalign, 0)
 			end
-			AddHudTimerToAll("flag_return_timer", current_timer + 1, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
+			AddHudTimerToAll("flag_return_timer", current_timer, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
 			AddHudIconToAll( hudstatusicondropped, ( "cp_flag_d" ), flag_hudstatusiconx, flag_hudstatusicony, flag_hudstatusiconw, flag_hudstatusiconh, flag_hudstatusiconalign )
 		elseif _G[flagname].status == 0 then
 			AddHudTextToAll("flag_athome", "#AD_FlagIsAt", text_hudstatusx, text_hudstatusy, text_hudstatusalign, 0)
@@ -908,7 +908,7 @@ function update_hud()
 		else
 			AddHudTextToAll("flag_tobase_text", "#AD_FlagReturnBase", text_hudstatusx, text_hudstatusy, text_hudstatusalign, 0)
 		end
-		AddHudTimerToAll("flag_tobase_timer", current_timer + 1, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
+		AddHudTimerToAll("flag_tobase_timer", current_timer, -1, text_hudstatusx, text_hudstatusy+8, text_hudstatusalign)
 		AddHudIconToAll(hudstatusicontobase, ( "cp_flag_h" ), flag_hudstatusiconx, flag_hudstatusicony, flag_hudstatusiconw, flag_hudstatusiconh, flag_hudstatusiconalign )
 	end
 	
