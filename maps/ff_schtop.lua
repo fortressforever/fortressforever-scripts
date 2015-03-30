@@ -124,6 +124,14 @@ blue_dspawn = { validspawn = blue_d_only }
 --  AND THEN, SOME MORE STUFF...
 -----------------------------------------------------------------------------
 
+red_window_clip = trigger_ff_clip:new({ clipflags = {
+ClipFlags.kClipAllPlayers, ClipFlags.kClipAllProjectiles,
+ClipFlags.kClipAllBullets,ClipFlags.kClipAllGrenades } })
+
+blue_window_clip = trigger_ff_clip:new({ clipflags = {
+ClipFlags.kClipAllPlayers, ClipFlags.kClipAllProjectiles,
+ClipFlags.kClipAllBullets,ClipFlags.kClipAllGrenades } })
+
 red_sec = red_security_trigger:new()
 blue_sec = blue_security_trigger:new()
 
