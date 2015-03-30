@@ -5,7 +5,6 @@ WeaponData
 	"CycleDecrement"		"1"		// Number of bullets fired per cycle
 
 	"Damage"			"108"		// Damage per burst
-	"DamageRadius"			"150"		// Radius of damage
 
 	"RecoilAmount"			"1"		// Amount of recoil
 
