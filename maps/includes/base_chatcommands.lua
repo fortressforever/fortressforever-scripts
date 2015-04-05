@@ -375,7 +375,7 @@ function player_onchat( player, chatstring )
 		func(unpack(params))
 	else
 		ChatToPlayer(player, "^"..CHAT_COMMAND_COLOR_ERROR.."Unexpected error while executing command")
-		chat_error("Command function find error for "..command.."("..paramstring.."):".. finderror)
+		chatbase_error("Command function find error for "..command.."("..paramstring.."):".. finderror)
 		return true
 	end
 	
