@@ -26,3 +26,9 @@ function table.contains_any(tbl, elements)
 	end
 	return false
 end
+
+function totable(obj)
+	if obj == nil then return {} end
+	if type(obj) == "table" then return obj end
+	return {obj}
+end

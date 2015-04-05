@@ -3,52 +3,9 @@
 local Class = require "util.class"
 require "util.utils"
 
-local function setup_items_key(self)
-	-- keep a usable reference to the base metatable
-	local real_obj = setmetatable({}, getmetatable(self))
-	-- add special handling of the items key
-	setmetatable(self, {
-		-- the items key returns an iterator
-		__index = function(t, k)
-			if k == "items" then
-				local i = 0
-				local n = self:Count()
-				return function()
-					i = i + 1
-					if i <= n then return self.entities[i] end
-				end
-			end
-			return real_obj[k]
-		end,
-		-- protect the items key from being assigned
-		__newindex = function(t, k, v)
-			if k == "items" then
-				return
-			end
-			real_obj[k] = v
-		end
-	})
-end
-
-local function get_param_as_table(param)
-	if param == nil then return {} end
-	if type(param) == "table" then return param end
-	return {param}
-end
-
--- lua tables start at index 1
-local function to_lua_index(collection_index)
-	return collection_index+1
-end
-
--- Collection started at index 0
-local function to_collection_index(lua_index)
-	return lua_index-1
-end
-
 local Collection = Class(function(self, entity_or_entities)
-	setup_items_key(self)
-	self.entities = get_param_as_table(entity_or_entities)
+	self.entities = totable(entity_or_entities)
+	self:SetupItemsKey()
 end)
 
 Collection.filters = {
@@ -98,7 +55,7 @@ end
 
 function Collection.PassesFilters(entity, filters)
 	if not filters then return true end
-	filters = get_param_as_table(filters)
+	filters = totable(filters)
 	for _,filter in ipairs(filters) do
 		if not Collection.PassesFilter(entity, filter) then
 			return false
@@ -107,8 +64,45 @@ function Collection.PassesFilters(entity, filters)
 	return true
 end
 
+function Collection:SetupItemsKey()
+	-- keep a usable reference to the base metatable
+	local real_obj = setmetatable({}, getmetatable(self))
+	-- add special handling of the items key
+	setmetatable(self, {
+		-- the items key returns an iterator
+		__index = function(t, k)
+			if k == "items" then
+				local i = 0
+				local n = self:Count()
+				return function()
+					i = i + 1
+					if i <= n then return self.entities[i] end
+				end
+			end
+			return real_obj[k]
+		end,
+		-- protect the items key from being assigned
+		__newindex = function(t, k, v)
+			if k == "items" then
+				return
+			end
+			real_obj[k] = v
+		end
+	})
+end
+
+-- lua tables start at index 1
+function Collection.ToLuaIndex(collection_index)
+	return collection_index+1
+end
+
+-- Collection started at index 0
+function Collection.ToCollectionIndex(lua_index)
+	return lua_index-1
+end
+
 function Collection:AddItem(entity_or_entities)
-	local entities_to_add = get_param_as_table(entity_or_entities)
+	local entities_to_add = totable(entity_or_entities)
 
 	for i,entity_to_add in ipairs(entities_to_add) do
 		table.insert(self.entities, entity_to_add)
@@ -116,7 +110,7 @@ function Collection:AddItem(entity_or_entities)
 end
 
 function Collection:AddFiltered(entity_or_entities, filters)
-	local entities_to_add = get_param_as_table(entity_or_entities)
+	local entities_to_add = totable(entity_or_entities)
 
 	for i,entity_to_add in ipairs(entities_to_add) do
 		if Collection.PassesFilters(entity_to_add, filters) then
@@ -126,12 +120,12 @@ function Collection:AddFiltered(entity_or_entities, filters)
 end
 
 function Collection:RemoveItem(entity_or_entities)
-	local entities_to_find = get_param_as_table(entity_or_entities)
+	local entities_to_find = totable(entity_or_entities)
 
 	for i,entity_to_find in ipairs(entities_to_find) do
 		local i = self:FindItemIndex(entity_to_find)
 		if i then
-			table.remove(self.entities, to_lua_index(i))
+			table.remove(self.entities, Collection.ToLuaIndex(i))
 		end
 	end
 end
@@ -153,7 +147,7 @@ function Collection:IsEmpty()
 end
 
 function Collection:HasItem(entity_or_entities)
-	local entities_to_find = get_param_as_table(entity_or_entities)
+	local entities_to_find = totable(entity_or_entities)
 
 	for i,entity_to_find in ipairs(entities_to_find) do
 		if self:FindItemIndex(entity_to_find) then
@@ -165,7 +159,7 @@ end
 
 -- this is a strange function
 function Collection:GetItem(entity_or_entities)
-	local entities_to_find = get_param_as_table(entity_or_entities)
+	local entities_to_find = totable(entity_or_entities)
 
 	for i,entity_to_find in ipairs(entities_to_find) do
 		local i = self:FindItemIndex(entity_to_find)
@@ -178,18 +172,18 @@ end
 function Collection:FindItemIndex(entity_to_find)
 	for i,entity in ipairs(self.entities) do
 		if entity:GetId() == entity_to_find:GetId() then
-			return to_collection_index(i)
+			return Collection.ToCollectionIndex(i)
 		end
 	end
 	return nil
 end
 
 function Collection:Element(i)
-	return self.entities[to_lua_index(i)]
+	return self.entities[Collection.ToLuaIndex(i)]
 end
 
 function Collection:GetByFilter(filters)
-	filters = get_param_as_table(filters)
+	filters = totable(filters)
 
 	-- optimization for players
 	local players_only = false
@@ -210,8 +204,8 @@ function Collection:GetByFilter(filters)
 end
 
 function Collection:GetByName(name_or_names, filters)
-	local names_to_find = get_param_as_table(name_or_names)
-	filters = get_param_as_table(filters)
+	local names_to_find = totable(name_or_names)
+	filters = totable(filters)
 
 	for i,name_to_find in ipairs(names_to_find) do
 		self:AddFiltered(GetEntitiesByName(name_to_find), filters)
@@ -219,7 +213,7 @@ function Collection:GetByName(name_or_names, filters)
 end
 
 function Collection:GetInSphere(entity_or_origin, radius, filters)
-	filters = get_param_as_table(filters)
+	filters = totable(filters)
 	local origin = IsEntity(entity_or_origin) and entity_or_origin:GetOrigin() or entity_or_origin
 	local ignore_walls = not table.contains(filters, CF.kTraceBlockWalls)
 	self:AddFiltered(GetEntitiesInSphere(origin, radius, ignore_walls), filters)
