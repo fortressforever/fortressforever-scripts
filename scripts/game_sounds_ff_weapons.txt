@@ -632,7 +632,7 @@
 		"volume"		"1.0"
 	"CompatibilityAttenuation"	"0.6"
 		"pitch"			"95,105"
-		"wave"			"weapons/shotgun/shotgun_fire.wav"
+		"wave"			"weapons/shotgun/pellet_fire.wav"
 	}
 	"shotgun.reload"
 	{
