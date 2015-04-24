@@ -28,6 +28,7 @@ PlayerClassData
 	ArmamentsData
 	{
 		"weapon"	"ff_weapon_crowbar"
+		"weapon"	"ff_weapon_shotgun"
 		"weapon"	"ff_weapon_ic"
 		"weapon"	"ff_weapon_flamethrower"
 	}
