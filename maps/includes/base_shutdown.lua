@@ -88,6 +88,8 @@ function button_common:allowed( allowed_entity )
 	if IsPlayer( allowed_entity ) then
 		local player = CastToPlayer( allowed_entity )
 		if player:GetTeamId() == self.team and player:IsAlive() then
+			player:AddFortPoints(100, "disabled security")
+			ObjectiveNotice( player, "disabled security" )
 			return EVENT_ALLOWED
 		end
 	end
@@ -212,6 +214,9 @@ function base_security_trigger:ontrigger( player )
 	-- only take sec down if its up currently
 	local button = _G[self.button]
 	if button and button.sec_up then
+		local player = CastToPlayer( player )
+		player:AddFortPoints(100, "disabled security")
+		ObjectiveNotice( player, "disabled security" )
 		self:onsecuritydown( player )
 	end
 end
