@@ -14,6 +14,7 @@ IncludeScript("base_respawnturret");
 POINTS_PER_CAPTURE = 10;
 FLAG_RETURN_TIME = 60;
 SECURITY_LENGTH = 45;
+FORTPOINTS_PER_SECURITY_DISABLE = 50
 
 local base_shutdown_base = {}
 base_shutdown_base.startup = startup
@@ -88,7 +89,7 @@ function button_common:allowed( allowed_entity )
 	if IsPlayer( allowed_entity ) then
 		local player = CastToPlayer( allowed_entity )
 		if player:GetTeamId() == self.team and player:IsAlive() then
-			player:AddFortPoints(100, "disabled security")
+			player:AddFortPoints( FORTPOINTS_PER_SECURITY_DISABLE, "#FF_FORTPOINTS_DISABLE_SECURITY" )
 			ObjectiveNotice( player, "disabled security" )
 			return EVENT_ALLOWED
 		end
@@ -215,7 +216,7 @@ function base_security_trigger:ontrigger( player )
 	local button = _G[self.button]
 	if button and button.sec_up then
 		local player = CastToPlayer( player )
-		player:AddFortPoints(100, "disabled security")
+		player:AddFortPoints( FORTPOINTS_PER_SECURITY_DISABLE, "#FF_FORTPOINTS_DISABLE_SECURITY" )
 		ObjectiveNotice( player, "disabled security" )
 		self:onsecuritydown( player )
 	end
