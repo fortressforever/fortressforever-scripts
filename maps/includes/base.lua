@@ -6,8 +6,10 @@
 -- This file is loaded automatically whenever a map is loaded.
 -- Do not change this file.
 -----------------------------------------------------------------------------
-local _G = getfenv(0)
 
+require "util.utils"
+Class = require "util.class"
+Collection = require "util.collection"
 
 -----------------------------------------------------------------------------
 -- defines
@@ -45,6 +47,61 @@ function baseclass:new (o)
 	setmetatable(o, self)
 	self.__index = self
 	return o
+end
+
+
+-----------------------------------------------------------------------------
+-- set up pairs and ipairs for iterating the global entity list
+--
+-- Example usage:
+--
+--   for ent_id, ent in pairs(GlobalEntityList) do
+--     print(ent_id, ent)
+--   end
+--
+-- Note: The order of iteration is always arbitrary
+-----------------------------------------------------------------------------
+local GlobalEntityListIterator = function()
+	local entity = GlobalEntityList:FirstEntity()
+	return function()
+		local cur_ent = entity
+		entity = GlobalEntityList:NextEntity(cur_ent)
+		if cur_ent then
+			return cur_ent:GetId(), cur_ent
+		else
+			return nil
+		end
+	end
+end
+
+local ipairs_base = ipairs
+ipairs = function(t)
+	if t == GlobalEntityList then
+		return GlobalEntityListIterator()
+	end
+	return ipairs_base(t)
+end
+
+local pairs_base = pairs
+pairs = function(t)
+	if t == GlobalEntityList then
+		return GlobalEntityListIterator()
+	end
+	return pairs_base(t)
+end
+
+
+-----------------------------------------------------------------------------
+-- make luabind's class_info function safer
+-- (don't crash if class_info() is called on non-luabind objects)
+-----------------------------------------------------------------------------
+local class_info_base = class_info
+class_info = function(obj)
+	local obj_type = type(obj)
+	if obj_type == "userdata" and getmetatable(obj).__luabind_class then
+		return class_info_base(obj)
+	end
+	return {}
 end
 
 

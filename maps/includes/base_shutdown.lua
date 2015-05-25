@@ -54,6 +54,13 @@ function security_off( team )
 			clip:SetClipFlags({ClipFlags.kClipTeamBlue})
 		end
 	end
+	
+	-- add a timer for the security on HUD
+	if team == "red" then	
+		AddHudTimerToAll( "red_sec_timer", SECURITY_LENGTH, -1, button_red.iconx, button_red.icony + 15, button_red.iconalign )
+	else 
+		AddHudTimerToAll( "blue_sec_timer", SECURITY_LENGTH, -1, button_blue.iconx, button_blue.icony + 15, button_blue.iconalign )
+	end
 end
 
 -- called when security gets turned on (team is a string prefix, like "red")
@@ -76,6 +83,9 @@ function security_on( team )
 			clip:SetClipFlags(_G[clipname].clipflags)
 		end
 	end
+	
+	-- remove security timer
+	RemoveHudItemFromAll( team.."_sec_timer" )
 end
 
 -----------------------------------------------------------------------------
@@ -241,6 +251,8 @@ blue_security_trigger = base_security_trigger:new( { team = Team.kBlue, button =
 -- Hurts
 -----------------------------------------------------------------------------
 
+-- backwards compatibility
+hurt = team_only_trigger:new({})
 -- red lasers hurt blue and vice-versa
 red_security_hurt = not_red_trigger:new({})
 blue_security_hurt = not_blue_trigger:new({})

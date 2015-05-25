@@ -42,8 +42,8 @@
 		SearchPaths
 		{
 			Game				|gameinfo_path|.
-			Game				hl2
-			Game				FortressForever
+			Game				|gameinfo_path|..\hl2
+			Game				|gameinfo_path|..\platform
 		}
 	}
 }

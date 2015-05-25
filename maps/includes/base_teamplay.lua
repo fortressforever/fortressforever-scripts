@@ -537,6 +537,7 @@ function baseflag:spawn()
 	LogLuaEvent(0, 0, "flag_spawn","flag_name",flag:GetName())
 	self.status = 0
 	self:refreshStatusIcons(flag:GetName())
+	flag:StartTrail(self.team)
 end
 
 function baseflag:addnotouch(player_id, duration)
@@ -723,12 +724,12 @@ end
 function baseflag:hasanimation() return true end
 
 function baseflag:gettouchsize( mins, maxs )
-	mins.x = mins.x
-	mins.y = mins.y
-	maxs.x = maxs.x
-	maxs.y = maxs.y
+	mins.x = mins.x * 1.50
+	mins.y = mins.y * 1.50
+	maxs.x = maxs.x * 1.50
+	maxs.y = maxs.y * 1.50
 	mins.z = 0
-	maxs.z = maxs.z * 0.65
+	maxs.z = maxs.z * 0.80
 end
 
 function baseflag:getphysicssize( mins, maxs )
@@ -756,7 +757,7 @@ function baseflag:refreshStatusIcons(flagname)
 		AddHudIconToAll( self.hudstatusiconcarried, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
 	elseif self.status == 2 then
 		AddHudTextToAll( flagname .. "location", self.droppedlocation, self.hudstatusiconx + 24, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
-		AddHudTimerToAll( flagname .. "timer", FLAG_RETURN_TIME+1, -1, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
+		AddHudTimerToAll( flagname .. "timer", FLAG_RETURN_TIME, -1, self.hudstatusiconx, (self.hudstatusicony + self.hudstatusiconh), self.hudstatusiconalign )
 		AddHudIconToAll( self.hudstatusicondropped, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )
 	else
 		AddHudIconToAll( self.hudstatusiconhome, ( flagname .. "_status" ), self.hudstatusiconx, self.hudstatusicony, self.hudstatusiconw, self.hudstatusiconh, self.hudstatusiconalign )	

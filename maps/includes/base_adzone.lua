@@ -568,7 +568,7 @@ function update_zone_text( player )
 			if not zone_status then
 				AddHudText( player, "defender_points_text", "#FF_Defenders", text_x, text_line1y, text_align )
 				AddHudText( player, "defender_points_text2", "#ADZ_ScoreNotice", text_x, text_line2y, text_align )
-				AddHudTimer( player, "defender_points_timer", current_timer +1, -1, text_x, text_line3y, text_align )
+				AddHudTimer( player, "defender_points_timer", current_timer, -1, text_x, text_line3y, text_align )
 			else
 				AddHudText( player, "attackers_in_text", "#FF_Attackers", text_x, text_line1y, text_align )
 				AddHudText( player, "attackers_in_text2", "#ADZ_AreIn", text_x, text_line2y, text_align )
@@ -596,7 +596,7 @@ function update_zone_text( player )
 			if not zone_status then
 				AddHudTextToAll( "defender_points_text", "#FF_Defenders", text_x, text_line1y, text_align )
 				AddHudTextToAll( "defender_points_text2", "#ADZ_ScoreNotice", text_x, text_line2y, text_align )
-				AddHudTimerToAll( "defender_points_timer", current_timer +1, -1, text_x, text_line3y, text_align )
+				AddHudTimerToAll( "defender_points_timer", current_timer, -1, text_x, text_line3y, text_align )
 			else
 				AddHudTextToAll( "attackers_in_text", "#FF_Attackers", text_x, text_line1y, text_align )
 				AddHudTextToAll( "attackers_in_text2", "#ADZ_AreIn", text_x, text_line2y, text_align )
