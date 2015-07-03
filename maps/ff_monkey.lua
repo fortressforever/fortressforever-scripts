@@ -138,7 +138,7 @@ redmonkeygrenades = genericbackpack:new({
 	materializesound = "Item.Materialize",
 	touchsound = "Backpack.Touch",
 	touchflags = {AllowFlags.kRed},
-	respawntime = 15,
+	respawntime = 30,
 	botgoaltype = Bot.kBackPack_Ammo
 })
 
@@ -153,7 +153,7 @@ bluemonkeygrenades = genericbackpack:new({
 	materializesound = "Item.Materialize",
 	touchsound = "Backpack.Touch",
 	touchflags = {AllowFlags.kBlue},
-	respawntime = 15,
+	respawntime = 30,
 	botgoaltype = Bot.kBackPack_Ammo
 })
 
