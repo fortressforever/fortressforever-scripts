@@ -769,6 +769,15 @@
 		"PaintBackgroundType"	"2"
 	}
 
+	HudKeyState
+	{
+		"fieldName"	"HudKeyState"
+		"xpos"	"c-32"
+		"ypos"	"r172"
+		"wide"	"64"
+		"tall"	"64"
+	}
+
 	HudAmmoSecondary
 	{
 		"fieldName" "HudAmmoSecondary"

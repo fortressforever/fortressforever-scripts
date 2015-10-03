@@ -44,6 +44,8 @@ Scheme
 		"HealthIncAbove100Color"	"0 255 0 255"
 		"HealthLowColor"		"255 0 0 255"
 		"HealthDmgColor"		"255 0 0 255"
+
+		"KeyStatePressed"		"0 255 0 255"
 		
 		/////////////// VGUI Colours ///////////////
 		"UI_Tone_Default"		"199 219 255 255"
