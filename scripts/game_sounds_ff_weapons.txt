@@ -770,7 +770,7 @@
 	}
 	"Spanner.specialhit"
 	{
-		"channel"		"CHAN_ITEM"
+		"channel"		"CHAN_AUTO"
 		"volume"		"1.0"
 	"CompatibilityAttenuation"	"1.0"
 		"wave"			"weapons/spanner/spanner_specialhit.wav"
