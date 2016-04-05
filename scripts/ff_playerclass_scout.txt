@@ -28,6 +28,7 @@ PlayerClassData
 	{
 		"weapon"	"ff_weapon_crowbar"
 		"weapon"	"ff_weapon_shotgun"
+		"weapon"	"ff_weapon_jumpgun"
 		"weapon"	"ff_weapon_nailgun"
 		"weapon"	"ff_weapon_deploymancannon"
 
