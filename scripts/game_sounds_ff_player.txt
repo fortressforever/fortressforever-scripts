@@ -228,3 +228,57 @@
 		"pitch"		"72"
 		"wave"		"@player/suitchargeok1.wav"
 	}
+
+	"Player.Cloak"
+	{
+		"channel"	"CHAN_AUTO"
+		"volume"	"0.25"
+		"soundlevel"	"SNDLVL_NORM"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"		"@player/cloak.wav"
+	}
+	
+	"Player.Cloak_End"
+	{
+		"channel"	"CHAN_AUTO"
+		"volume"	"0.25"
+		"soundlevel"	"SNDLVL_NORM"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"		"@player/cloak_end.wav"
+	}
+	
+	"Player.Cloak_Zap"
+	{
+		"channel"	"CHAN_AUTO"
+		"volume"	"1"
+		"soundlevel"	"SNDLVL_NORM"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"		"@player/cloak_zap.wav"
+	}
+	
+	"Player.knife_stab"
+	{
+		"channel"	"CHAN_AUTO"
+		"volume"	"1"
+		"soundlevel"	"SNDLVL_NORM"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"		"@player/knife_stab.wav"
+	}
+	
+	"Player.knife_charge"
+	{
+		"channel"	"CHAN_AUTO"
+		"volume"	".5"
+		"soundlevel"	"SNDLVL_NORM"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"		"@player/knife_charge.wav"
+	}
+	
+	"Player.knife_discharge"
+	{
+		"channel"	"CHAN_AUTO"
+		"volume"	"1"
+		"soundlevel"	"SNDLVL_NORM"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"		"@player/knife_discharge.wav"
+	}
