@@ -19,8 +19,10 @@ base_respawnturret = baseclass:new({ team = Team.kUnassigned })
 -- if team1 is the same as team2
 
 function base_respawnturret:validtarget( target_entity ) 
-	--local entity = GetEntity(ent_id)
-	return (AreTeamsAllied(self.team, target_entity:GetTeamId()) == false)
+	if self.team == target_entity:GetTeamId() and GetTeam(self.team):IsFFA() then
+		return false
+	end
+	return not AreTeamsAllied(self.team, target_entity:GetTeamId())
 end
 
 -- Turrets, by default, have a 2 second delay after they
