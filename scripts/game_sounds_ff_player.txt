@@ -228,3 +228,12 @@
 		"pitch"		"72"
 		"wave"		"@player/suitchargeok1.wav"
 	}
+
+	"Player.JetpackLoop"
+	{
+		"channel"		"CHAN_AUTO"
+		"volume"		"0.3"
+		"CompatibilityAttenuation"	"0.7"
+		"pitch"			"95,105"
+		"wave"			"player/jetpack_loop.wav"
+	}
