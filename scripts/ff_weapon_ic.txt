@@ -6,7 +6,7 @@ WeaponData
 	"DeployDelay"			"0.2"		// Delay before you can shoot when you first pull the weapon out
 	
 	"Damage"			"55"		// Damage per burst
-	"DamageRadius"			"125"		// Radius of damage
+	"DamageRadius"			"110"		// Radius of damage
 
 	"RecoilAmount"			"4"		// Amount of recoil
 
