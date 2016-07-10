@@ -8,7 +8,7 @@ WeaponData
 	"Damage"			"55"		// Damage per burst
 	"DamageRadius"			"110"		// Radius of damage
 
-	"RecoilAmount"			"4"		// Amount of recoil
+	"RecoilAmount"			"1"		// Amount of recoil
 
 	// Projectile weapons
 	"Speed"				"1000"		// Speed for projectile to travel at
