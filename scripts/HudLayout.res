@@ -914,7 +914,8 @@
 		"wide"	 "640"
 		"tall"	 "480"
 		
-		"HighlightColor" 	"255 255 255 100"
+		"HighlightColor" 	"0 0 0 180"
+		"HighlightBorderColor" 	"HUD_Tone_Default"
 		"ObjectiveNoticeColor" 	"0 0 0 180"
 
 		"LineHeight"	  "22"
