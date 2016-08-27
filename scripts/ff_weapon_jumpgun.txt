@@ -24,10 +24,10 @@ WeaponData
 
 	"clip_size"			"-1"
 	"clip2_size"			"-1"
-	"default_clip"			"50"
+	"default_clip"			"-1"
 	"default_clip2"			"-1"	
 
-	"primary_ammo"			"AMMO_NAILS"
+	"primary_ammo"			"None"
 	"secondary_ammo"		"None"
 
 	"ffencrypted"	"1" // required for the script to load
@@ -64,11 +64,6 @@ WeaponData
 		{	
 				"font"		"WeaponIconsSelected"
 				"character"	"t"
-		}
-		"ammo"
-		{
-				"font"		"WeaponIconsSmall"
-				"character"	"7"
 		}
 		"crosshair"
 		{
