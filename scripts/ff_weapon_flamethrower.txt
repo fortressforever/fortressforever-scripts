@@ -5,7 +5,7 @@ WeaponData
 	"CycleDecrement"		"1"		// Number of bullets fired per cycle
 	"DeployDelay"			"0.2"		// Delay before you can shoot when you first pull the weapon out
 
-	"Damage"			"13"		// Damage per burst (used to be 9)
+	"Damage"			"18"		// Damage per burst (used to be 9)
 
 	"RecoilAmount"			"0"		// Amount of recoil
 
