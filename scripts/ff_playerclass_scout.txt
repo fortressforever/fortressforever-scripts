@@ -23,12 +23,12 @@ PlayerClassData
 	
 	"firepower"			"10" // from 1 to 100
 	
-	// Weapns to automatically equip the class with
+	// Weapons to automatically equip the class with
 	ArmamentsData
 	{
 		"weapon"	"ff_weapon_crowbar"
 		"weapon"	"ff_weapon_shotgun"
-		"weapon"	"ff_weapon_jumpgun"
+		//"weapon"	"ff_weapon_jumpgun"
 		"weapon"	"ff_weapon_nailgun"
 		"weapon"	"ff_weapon_deploymancannon"
 
