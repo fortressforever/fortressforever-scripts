@@ -40,6 +40,7 @@
 		"attacker"	"short"
 		"weapon"	"string" 	// weapon name killer used 
 		"damagetype" "long"	// damage type
+		"killassister" "short"
 		"killersglevel"	"short"
 	}
 	
