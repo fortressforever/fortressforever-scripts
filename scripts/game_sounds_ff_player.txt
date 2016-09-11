@@ -231,7 +231,7 @@
 
 	"Player.JetpackLoop"
 	{
-		"channel"		"CHAN_AUTO"
+		"channel"		"CHAN_BODY"
 		"volume"		"0.3"
 		"CompatibilityAttenuation"	"0.7"
 		"pitch"			"95,105"
