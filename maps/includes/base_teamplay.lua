@@ -373,6 +373,7 @@ basecap = trigger_ff_script:new({
 	gren2 = 4,
 	item = "",
 	team = 0,
+	jetpackfuel = 100,
 	-- teampoints and fortpoints are defined as functions here for backwards compatibility (to always get the current value of the global variable)
 	-- when defining capture points that inherit from basecap, teampoints and fortpoints can be set to numbers instead
 	teampoints = function(cap, team) return POINTS_PER_CAPTURE end, 
@@ -472,6 +473,9 @@ function basecap:ontrigger ( trigger_entity )
 					if self.gren1 ~= nil and self.gren1 ~= 0 then player:AddAmmo(Ammo.kGren1, self.gren1) end
 					if self.gren2 ~= nil and self.gren2 ~= 0 then player:AddAmmo(Ammo.kGren2, self.gren2) end
 	
+					-- restock player specials
+					if self.jetpackfuel ~= nil then player:SetJetpackFuel(self.jetpackfuel) end 
+					
 					self:oncapture( player, v )
 				end
 			end
