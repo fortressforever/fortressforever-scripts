@@ -241,7 +241,7 @@
 	"Player.RampslideMetal"
 	{
 		"channel"	"CHAN_BODY"
-		"volume"		"0.3"
+		"volume"		"0.5"
 		"CompatibilityAttenuation"	"1.0"
 		"wave"			"player/rampslide4.wav"
 	}
