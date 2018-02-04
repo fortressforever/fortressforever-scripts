@@ -469,7 +469,7 @@
 	"railgun.halfcharge"
 	{
 		"channel"		"CHAN_WEAPON"
-		"volume"		"VOL_NORM"
+		"volume"		"0.3"
 		"pitch"			"PITCH_NORM"
 	"CompatibilityAttenuation"	"1.0"
 		"wave"			"ambient/energy/zap8.wav"
@@ -477,10 +477,10 @@
 	"railgun.fullcharge"
 	{
 		"channel"		"CHAN_WEAPON"
-		"volume"		"VOL_NORM"
-		"pitch"			"PITCH_NORM"
+		"volume"		"0.35"
+		"pitch"			"110"
 	"CompatibilityAttenuation"	"1.0"
-		"wave"			"ambient/energy/zap9.wav"
+		"wave"			"ambient/energy/zap8.wav"
 	}
 	"railgun.overcharge"
 	{
