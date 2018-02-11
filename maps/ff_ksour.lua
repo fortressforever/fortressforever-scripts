@@ -63,7 +63,10 @@ function startup()
 	-- start the timer for the points
 	AddScheduleRepeating("addpoints", PERIOD_TIME, addpoints)
 
-	setup_door_timer("start_gate", INITIAL_ROUND_DELAY)
+	-- start the timer for the round timer
+	setup_round_timer( INITIAL_ROUND_DELAY )
+	
+	setup_door_timer("start_gate", INITIAL_ROUND_DELAY)	
 	if INITIAL_ROUND_DELAY > 30 then AddSchedule( "dooropen30sec" , INITIAL_ROUND_DELAY - 30 , schedulemessagetoall, "Gates open in 30 seconds!" ) end
 	if INITIAL_ROUND_DELAY > 10 then AddSchedule( "dooropen10sec" , INITIAL_ROUND_DELAY - 10 , schedulemessagetoall, "Gates open in 10 seconds!" ) end
 	if INITIAL_ROUND_DELAY > 5 then AddSchedule( "dooropen5sec" , INITIAL_ROUND_DELAY - 5 , schedulemessagetoall, "5" ) end
@@ -130,6 +133,10 @@ function base_id_cap:oncapture(player, item)
 
 		AddSchedule("switch_teams", TEAM_SWITCH_DELAY, switch_teams)
 	else
+		-- out with the old timer, in with the new
+		destroy_round_timer()
+		setup_round_timer( ROUND_DELAY )
+		
 		phase = phase + 1
 
 		-- enable the next flag after a time
@@ -198,6 +205,10 @@ function switch_teams()
 	-- respawn the players
 	RespawnAllPlayers()
 	setup_door_timer("start_gate", INITIAL_ROUND_DELAY)
+	
+	-- out with the old timer, in with the new
+	destroy_round_timer()
+	setup_round_timer( INITIAL_ROUND_DELAY )
 	
 	-- run custom round reset stuff
 	onroundreset()
@@ -354,6 +365,25 @@ end
 ---------------------------------------
 --Resetting round
 ------------------------------------
+
+function forceRoundEnd()
+	-- end and stuff
+	
+	RemoveHudItemFromAll("cp"..phase.."_flag")
+	--cancel any flag action
+	local flag = GetInfoScriptByName("cp"..phase.."_flag")
+	if flag then 
+		flag:Remove()
+	end
+		
+	phase = 1
+	
+	OutputEvent( "start_gate", "Close" )
+	BroadCastMessage("#ADZ_Switch")
+	
+	AddSchedule("switch_teams", 0, switch_teams)
+end
+
 detpack_wall_open = nil
 
 function onroundreset()
