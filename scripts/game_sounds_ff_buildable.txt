@@ -127,6 +127,20 @@
 		"CompatibilityAttenuation"	"1.0"
 		"wave"		")buildable/sentry/sg_cloaksonar.wav"
 	}
+	"Sentry.PartialUpgrade"
+	{
+		"channel"		"CHAN_AUTO"
+		"volume"		"1.0"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"			"buildable/sentry/sg_partialupgrade.wav"
+	}
+	"Sentry.PartialDowngrade"
+	{
+		"channel"		"CHAN_AUTO"
+		"volume"		"1.0"
+		"CompatibilityAttenuation"	"1.0"
+		"wave"			"buildable/sentry/sg_partialdowngrade.wav"
+	}
 //----------------
 //Respawn Turret
 //----------------
