@@ -260,6 +260,25 @@
 	"CompatibilityAttenuation"	"1.0"
 		"wave"			"weapons/flamethrower/flamethrower_deploy.wav"
 	}
+	
+//----------------
+//Grappling hook
+//----------------
+	"hookgun.rope_snap"
+	{
+		"channel"		"CHAN_WEAPON"
+		"volume"		"0.4"
+	"CompatibilityAttenuation"	"0.7"
+		"pitch"			"95,105"
+		"wave"			"weapons/hookgun/snap_mono.wav"
+	}
+	"hookgun.winch"
+	{
+		"channel"		"CHAN_WEAPON"
+		"volume"		"1.0"
+	"CompatibilityAttenuation"	"1.0"
+		"wave"			"weapons/assaultcannon/assaultcannon_rotate.wav"
+	}
 //----------------
 //Knife, don't turn your back on me...
 //----------------
